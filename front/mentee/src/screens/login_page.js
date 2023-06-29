@@ -10,14 +10,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-gray-200 h-screen flex justify-center items-center">
-      <div className="bg-white flex flex-col justify-center py-10 px-1 sm:px-4  items-center w-fit rounded rounded-2xl shadow-2xl">
+    <div className="h-screen bg-gray-200  flex justify-center items-center sm:w-full">
+      <div className="w-fit h-fit bg-white flex flex-col justify-center py-10 px-1  items-center rounded rounded-2xl shadow-2xl">
         <div className="text-center">
           <div className="">
             <h1 className="text-3xl font-bold">
               {isLogin ? "Welcome Back!" : "Welcome, Join us!"}
             </h1>
-            <p className="text-gray-600 w-8/12 m-auto my-4">
+            <p className="text-gray-600 w-8/12 m-auto my-1">
               {isLogin
                 ? "Log in to your account to continue"
                 : "Enter your details below to create your account"}
@@ -26,7 +26,7 @@ export default function LoginPage() {
         </div>
 
         <div className="flex">
-          <div className="flex flex-col p-4 gap-4 items-center">
+          <div className="flex flex-col p-4  items-center">
             <div className="">
               <h1 className="text-2xl font-bold text-center">{}</h1>
             </div>
@@ -37,7 +37,7 @@ export default function LoginPage() {
                     First Name
                   </label>
                   <input
-                    className="md:w-96 border border-gray-300 rounded px-5 py-4 text-medium focus:outline-none focus:border-gray-400"
+                    className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
                     type="text"
                     placeholder="Enter your first name"
                     id="first_name"
@@ -50,7 +50,7 @@ export default function LoginPage() {
                     Last Name
                   </label>
                   <input
-                    className="md:w-96 border border-gray-300 rounded px-5 py-4 text-medium focus:outline-none focus:border-gray-400"
+                    className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
                     type="text"
                     placeholder="Enter your last name"
                     id="last_name"
@@ -62,7 +62,7 @@ export default function LoginPage() {
                   Email
                 </label>
                 <input
-                  className="md:w-96 border border-gray-300 rounded px-5 py-4 text-medium focus:outline-none focus:border-gray-400"
+                  className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
                   type="email"
                   placeholder="Enter your email"
                   id="email"
@@ -73,7 +73,7 @@ export default function LoginPage() {
                   {isLogin ? "Password" : "Create Password"}
                 </label>
                 <input
-                  className="md:w-96 border border-gray-300 rounded px-5 py-4 text-medium focus:outline-none focus:border-gray-400"
+                  className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
                   type="password"
                   placeholder="Enter your password"
                   id="password"
@@ -85,7 +85,7 @@ export default function LoginPage() {
                     Confirm Password
                   </label>
                   <input
-                    className="md:w-96 border border-gray-300 rounded px-5 py-4 text-medium focus:outline-none focus:border-gray-400"
+                    className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
                     type="password"
                     placeholder="Confirm your password"
                     id="confirm_password"
@@ -93,18 +93,18 @@ export default function LoginPage() {
                 </div>
               )}
             </div>
-            <div className="mb-6 flex flex-col items-center">
-              <button className="flex border border-gray-400 px-8 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40 px-8 mt-5">
+            <div className=" w-full mb-2 flex flex-col items-center">
+              <button className=" flex border border-gray-400 px-20 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40 mt-5 ">
                 {isLogin ? "Log In" : "Sign Up"}
               </button>
               <Link to="/classes">
-                <button className="flex border border-gray-400 px-8 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40 px-8 mt-5">
+                <button className="flex border w-full border-gray-400 px-5 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40  mt-5">
                   Skip for now
                 </button>
               </Link>
             </div>
 
-            <div className="mb-2">
+            <div className="mb-1">
               <Link className="text-blue-500" to="">
                 {isLogin ? "Forgot your password?" : ""}
               </Link>

@@ -125,7 +125,8 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="get-started-section bg-white flex flex-col-reverse items-center shadow-2xl w-fit px-10 pb-4 w-8/12 m-auto rounded mt-20 md:flex-row md:justify-evenly">
+      <div className="get-started-section bg-white flex flex-col-reverse 
+      items-center shadow-2xl w-fit px-10 pb-4 w-8/12 m-auto rounded mt-20 md:flex-row md:justify-evenly">
         <div className="flex flex-col gap-8 justify-center items-center">
           <h1 className="md:text-3xl text-2xl font-semibold">
             Get started with Mentee today
@@ -133,7 +134,8 @@ export default function Home() {
           <p>Start digitalising your classes.</p>
           <Link to="/login">
             {" "}
-            <button className="w-40 border border-gray-400 px-4 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40">
+            <button className="w-40 border border-gray-400 px-4 py-2 rounded
+             hover:bg-gray-700 hover:text-gray-100 transition delay-40">
               {" "}
               Sign up now
             </button>{" "}
@@ -146,7 +148,8 @@ export default function Home() {
         ></img>
       </div>
 
-      <div className="footer  flex mx-auto justify-evenly mt-28 align-end pb-10 text-gray-700">
+      <div className="footer  flex mx-auto 
+      justify-evenly mt-28 align-end pb-10 text-gray-700">
         <div className="logo">
           <h1 className="text-3xl font-bold mb-4 cursor-pointer hover:text-black">
             Mentee
