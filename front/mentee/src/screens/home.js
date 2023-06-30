@@ -1,9 +1,40 @@
 import Hero from "../components/hero.js";
-
-import React from "react";
 import { useState, useEffect } from "react";
-
 import { Link } from "react-router-dom";
+
+import { PrimaryButton } from "../components/buttons.js";
+
+// things to improve on this page to make it professional are the following
+
+const localLinks = ["Home", "Pricing", "About us", "Contact"];
+const socialLinks = ["Facebook", "Twitter", "Instagram", "LinkedIn"];
+const infoLinks = ["privacy policy", "Terms Of Service"];
+
+const getTestimonials = (image_src, name, position, num_of_stars) => {
+  let stars = [];
+
+  for (let i = 0; i < num_of_stars; i++) {
+    stars.push(<img className="w-7" alt="" src="images/star.png"></img>);
+  }
+
+  return (
+    <div className="flex justify-center align-center gap-10 mt-10">
+      <div className="flex flex-col justify-center align-center gap-4 p-10 bg-gray-100 rounded-2xl mb-10 shadow shadow-2xl">
+        <img className="w-40 rounded-full m-auto" alt="" src={image_src}></img>
+        <p className="font-semibold m-auto">{name}</p>
+        <p className="font-semibold m-auto text-gray-500 flex justify-center w-40">
+          {position}
+        </p>
+
+        <div className="flex justify-center align-center gap-2">{stars}</div>
+      </div>
+    </div>
+  );
+};
+
+function getLink(text) {
+  return <p className="cursor-pointer hover:text-black">{text}</p>;
+}
 
 export default function Home() {
   const [homePageData, setHomePageData] = useState({});
@@ -11,37 +42,7 @@ export default function Home() {
   const [testimonials, setTestimonials] = useState([]);
   const [socialLogos, setSocialLogos] = useState([]);
 
-  const getTestimonials = (image_src, name, position, num_of_stars) => {
-    let stars = [];
-    for (let i = 0; i < num_of_stars; i++) {
-      stars.push(getStars());
-    }
-    console.log(image_src);
-    return (
-      <div className="flex justify-center align-center gap-10 mt-10">
-        <div className="flex flex-col justify-center align-center gap-4 p-10 bg-gray-100 rounded-2xl mb-10 shadow shadow-2xl">
-          <img
-            className="w-40 rounded-full m-auto"
-            alt=""
-            src={image_src}
-          ></img>
-          <p className="font-semibold m-auto">{name}</p>
-          <p className="font-semibold m-auto text-gray-500 flex justify-center w-40">
-            {position}
-          </p>
-
-          <div className="flex justify-center align-center gap-2">{stars}</div>
-        </div>
-      </div>
-    );
-  };
-
-  const getStars = () => {
-    return <img className="w-7" alt="" src="images/star.png"></img>;
-  };
-
   useEffect(() => {
-    // now we fetch the home page data from the backend
     fetch("http://localhost:5000/")
       .then((res) => res.json())
       .then((data) => {
@@ -49,7 +50,6 @@ export default function Home() {
         setFeatureCards(data.featureCards);
         setTestimonials(data.testimonials);
         setSocialLogos(data.socialLogos);
-        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -94,9 +94,7 @@ export default function Home() {
 
               <div>
                 <Link to="/login">
-                  <button className="flex border border-gray-400 px-4 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40">
-                    Try now
-                  </button>
+                  <PrimaryButton text={"Try Now"} />
                 </Link>
               </div>
             </div>
@@ -133,10 +131,7 @@ export default function Home() {
           <p>Start digitalising your classes.</p>
           <Link to="/login">
             {" "}
-            <button className="w-40 border border-gray-400 px-4 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40">
-              {" "}
-              Sign up now
-            </button>{" "}
+            <PrimaryButton text={"Sign up now"} />
           </Link>
         </div>
         <img
@@ -151,28 +146,17 @@ export default function Home() {
           <h1 className="text-3xl font-bold mb-4 cursor-pointer hover:text-black">
             Mentee
           </h1>
-          <p className="cursor-pointer hover:text-black">2023 &copy; Mentee</p>
-          <p className="cursor-pointer hover:text-black">All rights reserved</p>
+          {getLink(`2023 Mentee`)}
+          {getLink("All rights reserved")}{" "}
         </div>
 
-        <div className="links">
-          <p className="cursor-pointer hover:text-black">Home</p>
-          <p className="cursor-pointer hover:text-black">Pricing</p>
-          <p className="cursor-pointer hover:text-black">About us</p>
-          <p className="cursor-pointer hover:text-black">Contact</p>
-        </div>
+        <div className="links">{localLinks.map((link) => getLink(link))}</div>
 
         <div className="socials">
-          <p className="cursor-pointer hover:text-black">Facebook</p>
-          <p className="cursor-pointer hover:text-black">Twitter</p>
-          <p className="cursor-pointer hover:text-black">Instagram</p>
-          <p className="cursor-pointer hover:text-black">LinkedIn</p>
+          {socialLinks.map((link) => getLink(link))}
         </div>
 
-        <div className="info">
-          <p className="cursor-pointer hover:text-black">privacy policy</p>
-          <p className="cursor-pointer hover:text-black">Terms Of Service</p>
-        </div>
+        <div className="info">{infoLinks.map((link) => getLink(link))}</div>
       </div>
     </div>
   );

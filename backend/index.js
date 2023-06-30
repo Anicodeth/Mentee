@@ -28,6 +28,10 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("user-connected", userId, isTeacher);
   });
 
+  socket.on("disconnect", (userId) => {
+    socket.emit("user-disconnected", userId);
+  });
+
   socket.on("chat-message-to-server", (message, roomId) => {
     io.to(roomId).emit("chat-message", message);
   });
@@ -35,7 +39,7 @@ io.on("connection", (socket) => {
 
 // ############ Untouchable code ############
 
-// ########## sample data for the home page ##########
+// ########## sample data ##########
 const homePageData = {
   headline: "Mentee",
   subheadline: "A platform for mentors and mentees to connect",
@@ -101,9 +105,40 @@ const homePageData = {
   ],
 };
 
-// ########## sample data for the home page ##########
+const sampleLectureData = {
+  title: "Lecture 1",
+  description: "This is the first lecture",
+  date: "2021-08-01",
+  time: "12:00",
+  duration: 60,
+  teacher: {
+    name: "John Doe",
+    image: "images/person_1.png",
+  },
+  mentees: [
+    {
+      name: "Marry Smith",
+      image: "images/person_3.png",
+    },
+    {
+      name: "Kyle James",
+
+      image: "images/person_2.png",
+    },
+    {
+      name: "Jason Lee",
+      image: "images/person_1.png",
+    },
+  ],
+};
+
+// ########## sample data  ##########
 
 app.get("/", (req, res) => {
   res.json(homePageData);
 });
 server.listen(5000, () => console.log("server is running on port 5000"));
+
+app.get("/lecture/:id", (req, res) => {
+  res.json(sampleLectureData);
+});
