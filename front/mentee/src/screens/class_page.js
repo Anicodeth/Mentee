@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import Peer from "peerjs";
+import { localIp } from "../constants";
 
 import {
   faPlay,
@@ -11,8 +12,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const globalIp = "http://192.168.135.214:5000";
-const localIp = "http://localhost:5000";
 const socket = io.connect(localIp);
 
 export default function ClassPage() {
@@ -343,9 +342,6 @@ export default function ClassPage() {
           {lectureDetails === undefined
             ? "Error loading Lecture data"
             : lectureDetails.title}
-        </div>
-        <div className="text-lg font-normal">
-          {lectureDetails === undefined ? "" : lectureDetails.description}
         </div>
       </div>
 

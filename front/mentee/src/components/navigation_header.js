@@ -1,13 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
 import { PrimaryButton } from "./buttons";
+import { localLinks } from "../constants.js";
 
 // now we import hamberger menu icon from font awesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
-
-const localLinks = ["Home", "Pricing", "About us", "Contact"];
 
 export default function NavigationHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -37,7 +35,7 @@ export default function NavigationHeader() {
   };
 
   return (
-    <div className="nav-container h-200 flex justify-between px-10 items-center lg:ml-40 lg:mr-40 md:ml-30 md:mr-30 sm:ml-8 sm:mr-10  my-20">
+    <div className="nav-container h-200 flex justify-around px-10 items-center my-20">
       {/* side menu */}
       <div
         className={`side-menu flex flex-col pt-40 items-center gap-20 absolute top-0 left-0 h-screen w-1/2 bg-gray-100 z-10 transition-all duration-500 ease-in-out ${
@@ -79,14 +77,16 @@ export default function NavigationHeader() {
 
       {/* main menu */}
 
-      <div className="flex gap-4 lg:gap-20 items-center">
+      <div className="flex gap-4 lg:gap-10 items-center">
         <div className="logo text-3xl font-bold">Mentee</div>
-        <div className="nav-links hidden md:block">
-          <ul className="flex justify-between gap-5 ">
+        <div className="nav-links hidden lg:block">
+          <ul className="flex justify-between gap-2 ">
             {localLinks.map((link) => {
               return (
                 <li>
-                  <Link className="hover:text-blue-900 ">{link}</Link>
+                  <Link className="hover:bg-gray-700 hover:text-gray-100 transition ease-in-out delay-50 px-4 py-2">
+                    {link}
+                  </Link>
                 </li>
               );
             })}
@@ -94,7 +94,7 @@ export default function NavigationHeader() {
         </div>
       </div>
 
-      <div className="nav-buttons hidden md:flex gap-4">
+      <div className="nav-buttons hidden lg:flex gap-2">
         <Link to="/login">
           {" "}
           <PrimaryButton text={"Sign up"} />
@@ -105,7 +105,7 @@ export default function NavigationHeader() {
           <PrimaryButton text={"Log in"} />
         </Link>
       </div>
-      <button onClick={toggleMenu} className="p-0 m-0 w-10 h-10 md:hidden">
+      <button onClick={toggleMenu} className="p-0 m-0 w-10 h-10 lg:hidden">
         {hamMenu()}
       </button>
     </div>
