@@ -1,0 +1,1 @@
+// here is defined the class model
