@@ -3,6 +3,9 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const cors = require("cors");
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());
+const classService = require("./services/classService");
 const mongoose = require("mongoose")
 // ############ Untouchable code ############
 const io = require("socket.io")(server, {
@@ -120,4 +123,42 @@ const homePageData = {
 app.get("/", (req, res) => {
   res.json(homePageData);
 });
-server.listen(5001, () => console.log("server is running on port 5000"));
+
+app.post("/classes", async (req, res) => {
+  try {
+    // Extract class details from the request body
+    // console.log(req.body);
+    const { name, type, description, schedule, price } = req.body;
+
+    // Combine the instructor ID with other class details
+    const classDetails = {
+      name,
+      type,
+      description,
+      schedule,
+      price,
+      
+    };
+
+    // Call the createNewClass function from classService.js
+    const newClass = await classService.createNewClass(classDetails);
+
+    // Return the newly created class as the response
+    res.status(201).json(newClass);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create a new class" });
+  }
+});
+
+app.get("/classes", async (req, res) => {
+  try {
+    const allClasses = await classService.getAllClasses();
+    res.json(allClasses);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch classes" });
+  }
+});
+
+
+
+server.listen(5000, () => console.log("server is running on port 5000"));
