@@ -3,7 +3,7 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const cors = require("cors");
-
+const mongoose = require("mongoose")
 // ############ Untouchable code ############
 const io = require("socket.io")(server, {
   cors: {
@@ -11,6 +11,20 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
   },
 });
+
+const connectionString = `mongodb+srv://afmtoday:OlxwPFCF0rLMnA3e@cluster0.edrrjyh.mongodb.net/mentee?retryWrites=true&w=majority`;
+
+mongoose.connect(connectionString, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+  });
+
 
 app.use(cors());
 
