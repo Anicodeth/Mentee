@@ -1,9 +1,61 @@
 import Hero from "../components/hero.js";
-
-import React from "react";
 import { useState, useEffect } from "react";
-
 import { Link } from "react-router-dom";
+import Footer from "../components/footer.js";
+import { PrimaryButton } from "../components/buttons.js";
+
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// things to improve on this page to make it professional are the following
+
+const getTestimonials = (image_src, name, num_of_stars, testimonial_text) => {
+  let stars = [];
+
+  for (let i = 0; i < num_of_stars; i++) {
+    stars.push(<img className="w-7" alt="" src="images/star.png"></img>);
+  }
+
+  // TODO: add default image
+  image_src = null;
+  return (
+    <div className="flex justify-center align-center gap-10 mt-10">
+      <div className="flex flex-col justify-center align-center gap-4 p-10 bg-gray-100 rounded-2xl mb-10 shadow shadow-2xl">
+        {image_src ? (
+          <img
+            className="w-40 rounded-full m-auto"
+            alt=""
+            src={image_src}
+          ></img>
+        ) : (
+          <div className="w-full text-center">
+            <FontAwesomeIcon icon={faUser} className="text-5xl" />
+          </div>
+        )}
+        <p className="font-semibold text-gray-700 m-auto">{name}</p>
+        <p className="text-gray-700 m-auto text-gray-500 w-56">
+          {testimonial_text}
+        </p>
+
+        <div className="flex justify-center align-center gap-2">{stars}</div>
+      </div>
+    </div>
+  );
+};
+
+const getExperts = (image_src, name, position) => {
+  return (
+    <div className="flex justify-center align-center gap-10 mt-10">
+      <div className="flex flex-col justify-center align-center gap-4 p-10 bg-gray-100 rounded-2xl mb-10 shadow shadow-2xl">
+        <img className="w-40 rounded-full m-auto" alt="" src={image_src}></img>
+        <p className="font-semibold text-gray-700 m-auto">{name}</p>
+        <p className="font-medium text-gray-700 m-auto text-gray-500 flex justify-center w-40 text-center">
+          {position}
+        </p>
+      </div>
+    </div>
+  );
+};
 
 export default function Home() {
   const [homePageData, setHomePageData] = useState({});
@@ -11,37 +63,7 @@ export default function Home() {
   const [testimonials, setTestimonials] = useState([]);
   const [socialLogos, setSocialLogos] = useState([]);
 
-  const getTestimonials = (image_src, name, position, num_of_stars) => {
-    let stars = [];
-    for (let i = 0; i < num_of_stars; i++) {
-      stars.push(getStars());
-    }
-    console.log(image_src);
-    return (
-      <div className="flex justify-center align-center gap-10 mt-10">
-        <div className="flex flex-col justify-center align-center gap-4 p-10 bg-gray-100 rounded-2xl mb-10 shadow shadow-2xl">
-          <img
-            className="w-40 rounded-full m-auto"
-            alt=""
-            src={image_src}
-          ></img>
-          <p className="font-semibold m-auto">{name}</p>
-          <p className="font-semibold m-auto text-gray-500 flex justify-center w-40">
-            {position}
-          </p>
-
-          <div className="flex justify-center align-center gap-2">{stars}</div>
-        </div>
-      </div>
-    );
-  };
-
-  const getStars = () => {
-    return <img className="w-7" alt="" src="images/star.png"></img>;
-  };
-
   useEffect(() => {
-    // now we fetch the home page data from the backend
     fetch("http://localhost:5000/")
       .then((res) => res.json())
       .then((data) => {
@@ -49,7 +71,6 @@ export default function Home() {
         setFeatureCards(data.featureCards);
         setTestimonials(data.testimonials);
         setSocialLogos(data.socialLogos);
-        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -65,7 +86,9 @@ export default function Home() {
         heroImage={homePageData.heroImage}
       />
       <div className="social-logos flex-column justify-center align-center ">
-        <div className="flex justify-center text-2xl font-bold">Get Us On</div>
+        <div className="flex justify-center text-2xl text-gray-800 font-bold">
+          Get Us On
+        </div>
         <ul className="flex pt-10 gap-12 w-full justify-center align-center ">
           {socialLogos.map((logo) => {
             return (
@@ -79,6 +102,26 @@ export default function Home() {
         </ul>
       </div>
 
+      <div className="experts mt-28">
+        <div className="flex flex-col justify-center align-center gap-4">
+          <h2 className="text-2xl text-gray-800 font-bold m-auto">Experts</h2>
+          <p className="font-semibold text-gray-700 m-auto">
+            Meet our team of experts and mentors
+          </p>
+
+          <div className="flex justify-center  gap-4 flex-wrap">
+            {testimonials.map((expert) => {
+              return getExperts(
+                expert.image_src,
+                expert.name,
+                expert.position,
+                expert.num_of_stars
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
       {featureCards.map((card) => {
         return (
           <div
@@ -89,14 +132,14 @@ export default function Home() {
             } p-4 m-10 gap-10 mt-20 justify-center mb-20 lg:w-8/12 m-auto`}
           >
             <div className="side-note md:px-0 px-10 items-center flex flex-col justify-center gap-10">
-              <h2 className="text-2xl font-bold">{card.title}</h2>
-              <p className="">{card.description}</p>
+              <h2 className="text-2xl text-gray-800 font-bold">{card.title}</h2>
+              <p className="text-lg text-gray-800 font-light">
+                {card.description}
+              </p>
 
               <div>
                 <Link to="/login">
-                  <button className="flex border border-gray-400 px-4 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40">
-                    Try now
-                  </button>
+                  <PrimaryButton text={"Try Now"} />
                 </Link>
               </div>
             </div>
@@ -107,38 +150,44 @@ export default function Home() {
 
       <div className="testimonials">
         <div className="flex flex-col justify-center align-center gap-4">
-          <h2 className="text-2xl font-bold m-auto">Testimonials</h2>
-          <p className="font-semibold m-auto">
-            Loorem ipsum dolor sit amet, consectetur adipiscing elit.
+          <h2 className="text-2xl text-gray-800 font-bold m-auto">
+            Testimonials
+          </h2>
+          <p className="font-semibold text-gray-700 m-auto">
+            What do our clients say about us?
           </p>
 
-          <div className="flex justify-center  gap-4 flex-wrap">
+          <div className="flex justify-center gap-4 flex-wrap">
             {testimonials.map((testimonial) => {
               return getTestimonials(
                 testimonial.image_src,
                 testimonial.name,
-                testimonial.position,
-                testimonial.num_of_stars
+                testimonial.num_of_stars,
+                testimonial.testimonial_text
               );
             })}
           </div>
         </div>
       </div>
 
-      <div className="get-started-section bg-white flex flex-col-reverse 
-      items-center shadow-2xl w-fit px-10 pb-4 w-8/12 m-auto rounded mt-20 md:flex-row md:justify-evenly">
+      <div
+        className="get-started-section bg-white flex flex-col-reverse 
+      items-center shadow-2xl w-fit px-4 pb-4 w-8/12 rounded mt-20 md:flex-row md:justify-evenly mx-4 lg:w-9/12 lg:mx-auto"
+      >
         <div className="flex flex-col gap-8 justify-center items-center">
-          <h1 className="md:text-3xl text-2xl font-semibold">
+          <h1 className="md:text-3xl text-2xl text-gray-800 font-semibold text-gray-700">
             Get started with Mentee today
           </h1>
-          <p>Start digitalising your classes.</p>
+          <p className="text-lg text-gray-700 text-light">
+            Discover the benefits of Mentee.com's live online learning and
+            mentorship platform. Engage with expert mentors in real-time,
+            receive personalized guidance, network with professionals, develop
+            skills, and learn from the comfort of your own space. Unleash your
+            potential today!
+          </p>
           <Link to="/login">
             {" "}
-            <button className="w-40 border border-gray-400 px-4 py-2 rounded
-             hover:bg-gray-700 hover:text-gray-100 transition delay-40">
-              {" "}
-              Sign up now
-            </button>{" "}
+            <PrimaryButton text={"Sign up now"} />
           </Link>
         </div>
         <img
@@ -147,36 +196,7 @@ export default function Home() {
           className="w-96 relative bottom-10"
         ></img>
       </div>
-
-      <div className="footer  flex mx-auto 
-      justify-evenly mt-28 align-end pb-10 text-gray-700">
-        <div className="logo">
-          <h1 className="text-3xl font-bold mb-4 cursor-pointer hover:text-black">
-            Mentee
-          </h1>
-          <p className="cursor-pointer hover:text-black">2023 &copy; Mentee</p>
-          <p className="cursor-pointer hover:text-black">All rights reserved</p>
-        </div>
-
-        <div className="links">
-          <p className="cursor-pointer hover:text-black">Home</p>
-          <p className="cursor-pointer hover:text-black">Pricing</p>
-          <p className="cursor-pointer hover:text-black">About us</p>
-          <p className="cursor-pointer hover:text-black">Contact</p>
-        </div>
-
-        <div className="socials">
-          <p className="cursor-pointer hover:text-black">Facebook</p>
-          <p className="cursor-pointer hover:text-black">Twitter</p>
-          <p className="cursor-pointer hover:text-black">Instagram</p>
-          <p className="cursor-pointer hover:text-black">LinkedIn</p>
-        </div>
-
-        <div className="info">
-          <p className="cursor-pointer hover:text-black">privacy policy</p>
-          <p className="cursor-pointer hover:text-black">Terms Of Service</p>
-        </div>
-      </div>
+      <Footer />
     </div>
   );
 }
