@@ -48,6 +48,19 @@ const getAllClasses = async () => {
   }
 };
 
+const getClassesByInstructorId = async (instructorId) => {
+  try {
+
+      const classesByInstructor = await Class.find({ instructor: instructorId });
+      return classesByInstructor;
+
+  } catch (error) {
+
+    throw new Error('Failed to fetch classes created by the instructor');
+
+  }
+};
+
 // Function to update a class by its ID
 const updateClassById = async (classId, updatedClassDetails) => {
   try {
@@ -73,5 +86,6 @@ module.exports = {
     getClassById, 
     getAllClasses,
     updateClassById, 
-    deleteClassById
+    deleteClassById,
+    getClassesByInstructorId
    };

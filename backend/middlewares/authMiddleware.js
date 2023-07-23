@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const secretKey = "your-secret-key"; // Replace this with your actual secret key
 
 const authMiddleware = (req, res, next) => {
-  console.log(req.header("Authorization"))
+  
   const token = req.header("Authorization");
 
   if (!token) {

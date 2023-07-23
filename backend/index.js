@@ -6,6 +6,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const classRoutes = require("./routes/classRoutes");
 const userRoutes = require("./routes/userRoutes"); 
+const enrollmentRoutes = require('./routes/enrollmentRoutes');
+
 
 app.use(bodyParser.json());
 
@@ -135,6 +137,10 @@ app.use("/classes", classRoutes);
 
 // User routes
 app.use("/users", userRoutes); 
+
+
+//Enrollment routes
+app.use('/enrollments', enrollmentRoutes);
 
 
 
