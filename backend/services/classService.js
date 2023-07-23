@@ -68,4 +68,10 @@ const deleteClassById = async (classId) => {
   }
 };
 
-module.exports = { createNewClass, getClassById, getAllClasses, updateClassById, deleteClassById };
+module.exports = {
+    createNewClass,
+    getClassById, 
+    getAllClasses,
+    updateClassById, 
+    deleteClassById
+   };

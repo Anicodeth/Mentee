@@ -4,12 +4,14 @@ const app = express();
 const server = http.createServer(app);
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
 const classRoutes = require("./routes/classRoutes");
+const userRoutes = require("./routes/userRoutes"); 
 
 app.use(bodyParser.json());
-const classService = require("./services/classService");
+
 const mongoose = require("mongoose")
+
+
 // ############ Untouchable code ############
 const io = require("socket.io")(server, {
   cors: {
@@ -130,5 +132,10 @@ app.get("/", (req, res) => {
 
 // Class routes (using classRoutes)
 app.use("/classes", classRoutes);
+
+// User routes
+app.use("/users", userRoutes); 
+
+
 
 server.listen(5000, () => console.log("server is running on port 5000"))
