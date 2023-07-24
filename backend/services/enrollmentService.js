@@ -19,7 +19,7 @@ const enrollUserInClass = async (userId, classId) => {
         user: userId,
         class: classId,
     });
-    console.log(newEnrollment);
+
 
     // Save the new enrollment in the database
     const savedEnrollment = await newEnrollment.save();

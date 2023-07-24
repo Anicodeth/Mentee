@@ -34,7 +34,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
  *       500:
  *         description: Failed to create a new class.
  */
-router.post('/', authMiddleware, classController.createClass);
+router.post('/createClass', authMiddleware, classController.createClass);
 
 /**
  * @openapi
@@ -99,6 +99,72 @@ router.put('/:id', authMiddleware, classController.updateClassById);
  *         description: Failed to delete class.
  */
 router.delete('/:id', authMiddleware, classController.deleteClassById);
+
+
+/**
+ * @openapi
+ * /classes/{id}:
+ *   get:
+ *     summary: search a class by its ID.
+ *     tags: [Classes]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID of the class to delete.
+ *     responses:
+ *       200:
+ *         description: Class found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Class'
+ *       404:
+ *         description: Class not found.
+ *       500:
+ *         description: Failed to Search class.
+ */
+
+router.get('/id/:id', authMiddleware, classController.getClassById);
+
+
+/**
+ * @openapi
+ * /classes/search:
+ *   post:
+ *     summary: Search for classes by type or name.
+ *     tags: [Classes]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               query:
+ *                 type: string
+ *             example:
+ *               query: "math"
+ *     responses:
+ *       200:
+ *         description: List of classes that match the search query.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Class'
+ *       500:
+ *         description: Failed to fetch classes.
+ */
+
+router.post('/search',  classController.searchClasses);
 
 /**
  * @openapi

@@ -215,3 +215,13 @@ router.put('/:id', authMiddleware, userController.updateUserById);
 router.delete('/:id', authMiddleware, userController.deleteUserById);
 
 module.exports = router;
+
+/*{
+    "name": "philosophy",
+    "type": "philosophy",
+    "description": "philosophy",
+    "schedule" : "2023-07-20T12:00:00.000Z",
+    "price" : "1000"
+  }
+
+  */

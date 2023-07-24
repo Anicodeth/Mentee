@@ -5,6 +5,8 @@ const createClass = async (req, res) => {
     // Extract class details from the request body
     const { name, type, description, schedule, price } = req.body;
 
+    // console.log(req.user.userId)
+
     // Combine the instructor ID with other class details
     const classDetails = {
       name,
@@ -12,8 +14,10 @@ const createClass = async (req, res) => {
       description,
       schedule,
       price,
-      instructor: req.user._id, // The instructor ID is obtained from the authenticated user
+      instructor: req.user.userId, // The instructor ID is obtained from the authenticated user
     };
+
+    // console.log(classDetails);
 
     // Call the createNewClass function from classService.js
     const newClass = await classService.createNewClass(classDetails);
@@ -39,12 +43,15 @@ const getAllClasses = async (req, res) => {
     const allClasses = await classService.getAllClasses();
     res.json(allClasses);
   } catch (error) {
+    
     res.status(500).json({ error: "Failed to fetch classes" });
   }
 };
 
 /// get classes created by a instructor
 const getClassesByInstructor = async (req, res) => {
+  
+ 
     try {
       const instructorId = req.user._id;
       const classesByInstructor = await classService.getClassesByInstructorId(
@@ -103,11 +110,56 @@ const deleteClassById = async (req, res) => {
   }
 };
 
+
+const getClassById = async (req, res) => {
+
+
+  try {
+    const { id } = req.params;
+    
+    
+    const Class = await classService.findClassById(id);
+
+    if (!Class) {
+
+      return res.status(404).json({ error: "Class not found" });
+
+    }
+
+    res.status(200).json(Class);
+  } catch(error) {
+    res.status(500).json({error: "Failed to search class"})
+  }
+}
+
+const searchClasses = async (req, res) => {
+  try {
+    
+    const { query } = req.body;
+    // console.log(query);
+
+  const foundClasses = await classService.searchClasses(query);
+
+  if (!foundClasses) {
+    return res.status(404).json({ error: "Class not found" });
+  }
+  return res.status(200).json(foundClasses);
+  } catch (error) {
+    res.status(500).json({error: "Failed to search class"})
+  }
+}
+
 module.exports = {
   createClass,
   getAllClasses,
   updateClassById,
   deleteClassById,
   getClassesByInstructor,
+  getClassById,
+  searchClasses
   // Add other class-related controller functions if needed
 };
+
+
+//userId = 64bcd0839925213eebb6eac0
+//classId = 64bae1a1f0791071259cdc27

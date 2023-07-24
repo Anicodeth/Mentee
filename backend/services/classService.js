@@ -5,7 +5,7 @@ const Class = require('../models/Class');
 const createNewClass = async (classDetails) => {
   try {
     // Extract class details from the input
-    const { name, type, description, schedule, price } = classDetails;
+    const { name, type, description, schedule, price, instructor } = classDetails;
     
 
     // Create a new instance of the Class model
@@ -15,6 +15,7 @@ const createNewClass = async (classDetails) => {
       description,
       schedule,
       price,
+      instructor
     });
     
     // Save the new class in the database
@@ -81,11 +82,44 @@ const deleteClassById = async (classId) => {
   }
 };
 
+/* function to search class by id*/
+const findClassById = async (classId) => {
+  try {
+    const foundClass = await Class.findById(classId);
+  
+    return foundClass;
+  } catch(error) {
+    throw new Error('Failed to search a class');
+  }
+}
+
+
+// exaustive search by both name and type
+const searchClasses = async (searchInput) => {
+  try {
+    // Prepare the query for the "OR" search
+    const query = {
+      $or: [
+        { type: { $regex: new RegExp(searchInput, 'i') } }, // Case-insensitive type search
+        { name: { $regex: new RegExp(searchInput, 'i') } }, // Case-insensitive name search
+      ],
+    };
+
+    // Perform the search using the query
+    const foundClasses = await Class.find(query);
+    return foundClasses;
+  } catch (error) {
+    throw new Error('Failed to search classes');
+  }
+};
+
 module.exports = {
     createNewClass,
     getClassById, 
     getAllClasses,
     updateClassById, 
     deleteClassById,
-    getClassesByInstructorId
+    getClassesByInstructorId,
+    findClassById,
+    searchClasses
    };
