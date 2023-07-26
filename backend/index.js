@@ -148,3 +148,5 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 
 server.listen(5000, () => console.log("server is running on port 5000"))
+
+module.exports = app;

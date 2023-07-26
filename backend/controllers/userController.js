@@ -26,15 +26,18 @@ const createUser = async (req, res) => {
     const { name, email, password, role } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    
 
     const userDetails = {
       name,
       email,
-      password: hashedPassword,
+      password: password,
       role
     };
 
     const newUser = await userService.createNewUser(userDetails);
+
+    console.log(newUser);
 
     // Generate a JWT token and send it in the response
     const token = generateToken(newUser);
@@ -52,9 +55,13 @@ const loginUser = async (req, res) => {
       const { email, password } = req.body;
     
       const user = await userService.getUserByEmail(email);
+
+      
+      
+      
       
   
-      if (!user || !(await bcrypt.compare(password, user.password))) {
+      if (!user || !(password == user.password)) {
         return res.status(401).json({ error: "Invalid email or password" });
       }
   
@@ -63,6 +70,7 @@ const loginUser = async (req, res) => {
   
       res.json({ token, user });
     } catch (error) {
+      
       res.status(500).json({ error: "Failed to login" });
     }
   };
@@ -85,9 +93,14 @@ const getAllUsers = async (req, res) => {
 // Function to get a user by their ID
 const getUserById = async (req, res) => {
   try {
+        console.log(req.user);
+        const { id } = req.user.userId;
 
-        const { id } = req.params;
-        const foundUser = await userService.getUserById(id);
+        
+        
+        // const foundUser = await userService.getUserById(id);
+        const foundUser = await userService.getUserByEmail(req.user.email);
+        return res.status(200).json(foundUser);
         
 
   } catch (error) {
@@ -99,10 +112,13 @@ const getUserById = async (req, res) => {
 // Function to update a user by their ID
 const updateUserById = async (req, res) => {
   try {
-
-        const { id } = req.params;
+       
+        const { id } = req.user.userId;
+        
         const updatedUserDetails = req.body;
-        const updatedUser = await userService.updateUserById(id, updatedUserDetails);
+        
+        const updatedUser = await userService.updateUserById(req.user.userId, updatedUserDetails);
+        console.log(updatedUser);
         res.json(updatedUser);
 
   } catch (error) {
@@ -116,9 +132,9 @@ const updateUserById = async (req, res) => {
 const deleteUserById = async (req, res) => {
   try {
 
-        const { id } = req.params;
-        const deletedUser = await userService.deleteUserById(id);
-        res.json(deletedUser);
+        const { id } = req.user.userId;
+        const deletedUser = await userService.deleteUserByEmail(req.user.email);
+        res.status(201).json(deletedUser);
 
   } catch (error) {
 

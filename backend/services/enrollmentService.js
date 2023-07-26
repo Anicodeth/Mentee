@@ -30,6 +30,7 @@ const enrollUserInClass = async (userId, classId) => {
   }
 };
 
+
 // Function to get all enrollments of a user
 const getUserEnrollments = async (userId) => {
   try {

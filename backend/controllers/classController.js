@@ -21,6 +21,7 @@ const createClass = async (req, res) => {
 
     // Call the createNewClass function from classService.js
     const newClass = await classService.createNewClass(classDetails);
+    // console.log(newClass);
 
     // Return the newly created class as the response
     res.status(201).json(newClass);

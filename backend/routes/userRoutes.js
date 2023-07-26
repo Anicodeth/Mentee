@@ -143,13 +143,11 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 /**
  * @swagger
- * /users/{id}:
+ * /users:
  *   put:
  *     summary: Update a user by their ID
  *     tags: [Users]
  *     parameters:
- *       - in: path
- *         name: id
  *         schema:
  *           type: string
  *         required: true
@@ -206,22 +204,12 @@ router.post('/login', userController.loginUser);
 router.get('/', authMiddleware, userController.getAllUsers);
 
 // Get a user by their ID (requires authentication)
-router.get('/:id', authMiddleware, userController.getUserById);
+router.get('/me', authMiddleware, userController.getUserById);
 
 // Update a user by their ID (requires authentication)
-router.put('/:id', authMiddleware, userController.updateUserById);
+router.put('/', authMiddleware, userController.updateUserById);
 
 // Delete a user by their ID (requires authentication)
-router.delete('/:id', authMiddleware, userController.deleteUserById);
+router.delete('/', authMiddleware, userController.deleteUserById);
 
 module.exports = router;
-
-/*{
-    "name": "philosophy",
-    "type": "philosophy",
-    "description": "philosophy",
-    "schedule" : "2023-07-20T12:00:00.000Z",
-    "price" : "1000"
-  }
-
-  */

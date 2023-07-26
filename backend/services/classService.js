@@ -17,13 +17,17 @@ const createNewClass = async (classDetails) => {
       price,
       instructor
     });
+
+    // console.log(newClass);
     
     // Save the new class in the database
     const savedClass = await newClass.save();
+    // console.log(savedClass);
     console.log("class saved")
 
     return savedClass;
   } catch (error) {
+
     throw new Error('Failed to create a new class');
   }
 };
@@ -86,9 +90,11 @@ const deleteClassById = async (classId) => {
 const findClassById = async (classId) => {
   try {
     const foundClass = await Class.findById(classId);
-  
+
     return foundClass;
   } catch(error) {
+   
+    
     throw new Error('Failed to search a class');
   }
 }
