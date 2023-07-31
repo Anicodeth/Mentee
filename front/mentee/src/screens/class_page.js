@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import io from "socket.io-client";
 import Peer from "peerjs";
 import { localIp } from "../constants";
+
+import Pusher from "pusher-js";
 
 import {
   faPlay,
@@ -12,15 +13,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const socket = io.connect(localIp);
-
 export default function ClassPage() {
   const [chatWidth, setChatWidth] = useState("w-0");
   const [videoWidth, setVideoWidth] = useState("w-full");
   const [roomJoined, setRoomJoined] = useState(false);
   const [messages, setMessages] = useState([]);
 
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
   const roomId = useParams().id;
@@ -37,9 +36,11 @@ export default function ClassPage() {
   const [isVideoStream, setIsVideoStream] = useState(true);
 
   const [currentStudents, setCurrentStudents] = useState([]);
+  const [userInfo, setUserInfo] = useState({ name: "unknown" });
 
-  // TODO first we fetch the user details from the backend and will use it to display the user details including in the chat
+  const [isStreamAvailable, setIsStreamAvailable] = useState(false);
 
+  console.log(userInfo, ">......");
   const toggleChat = () => {
     if (chatWidth === "w-4/12") {
       setChatWidth("w-0");
@@ -81,22 +82,35 @@ export default function ClassPage() {
   );
 
   function addMessage() {
-    // to avoid manipulating the DOM directly
-
     const messageBox = document.getElementById("message");
-    const sender = "me";
+    const sender = userInfo.name;
     const text = messageBox.value;
 
     const message = {
       sender: sender,
       text: text,
+      status: "sending",
     };
 
+    setMessages((prevMessages) => [...prevMessages, message]);
     messageBox.value = "";
-    socket.emit("chat-message-to-server", message, roomId);
 
-    const chatMessages = document.querySelector(".chat-messages");
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    fetch(`${localIp}/chat`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: message,
+        roomId: roomId,
+      }),
+    })
+      .then((res) => {
+        console.log("sucess in chat req");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function handleKeyDown(event) {
@@ -107,7 +121,7 @@ export default function ClassPage() {
   }
 
   function playPauseVideo() {
-    if (videoRef.current.srcObject) {
+    if (videoRef.current && videoRef.current.srcObject) {
       if (isPlaying) {
         videoRef.current.pause();
         setIsPlaying(false);
@@ -218,7 +232,7 @@ export default function ClassPage() {
     }
     setIsVideoStream(true);
 
-    if (videoRef.current.srcObject === null) {
+    if (videoRef.current && videoRef.current.srcObject === null) {
       navigator.mediaDevices
         .getUserMedia({
           video: true,
@@ -231,6 +245,8 @@ export default function ClassPage() {
           videoRef.current.srcObject = curVideoStream;
           videoRef.current.addEventListener("loadedmetadata", () => {
             videoRef.current.play();
+            setIsPlaying(true);
+            setIsStreamAvailable(true);
           });
           return curVideoStream;
         });
@@ -251,6 +267,7 @@ export default function ClassPage() {
   }
 
   function sendStreamToAll(stream) {
+    console.log(currentStudents);
     currentStudents.forEach((studentId) => {
       peerRef.current.call(studentId, stream);
     });
@@ -258,10 +275,85 @@ export default function ClassPage() {
 
   function joinNewStudent(userId, isUserTeacher) {
     if (videoRef.current.srcObject) {
+      console.log("calling the new student");
       peerRef.current.call(userId, videoRef.current.srcObject);
     }
   }
   useEffect(() => {
+    const pusher = new Pusher("20d590a2a5e4500caac1", {
+      cluster: "ap2",
+    });
+
+    const myRoom = pusher.subscribe(roomId);
+
+    myRoom.bind("user-connected", (userInfo) => {
+      console.log("new user just connected");
+      const { userId, isUserTeacher } = userInfo;
+      addStudent(userId);
+      if (isTeacher) {
+        joinNewStudent(userId, isUserTeacher);
+      }
+    });
+
+    myRoom.bind("user-disconnected", (userInfo) => {
+      const { studentId } = userInfo;
+      removeStudent(studentId);
+    });
+
+    myRoom.bind("chat-message", (message) => {
+      console.log("chat from pusher:", message, userInfo);
+
+      if (message.sender === userInfo.name) {
+        console.log("here in add message");
+        const date = new Date();
+        message.status =
+          (date.getHours() % 12).toString() +
+          ":" +
+          date.getMinutes().toString() +
+          (date.getHours() > 11 ? " PM" : " AM");
+
+        setMessages((prevMessages) => {
+          let res = prevMessages.slice(0, prevMessages.length - 1);
+          res.push(message);
+          return res;
+        });
+      } else {
+        const date = new Date();
+        message.status =
+          (date.getHours() % 12).toString() +
+          ":" +
+          date.getMinutes().toString() +
+          (date.getHours() > 11 ? " PM" : " AM");
+
+        setMessages((prevMessages) => [...prevMessages, message]);
+      }
+    });
+
+    if (userInfo.name === "unknown") {
+      fetch(`${localIp}/my-info`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: "",
+        }),
+      })
+        .then((res) => {
+          console.log("........", res);
+          return res.json();
+        })
+        .then((data) => {
+          console.log("hereee");
+          setUserInfo((prev) => {
+            return { ...prev, name: data.name, email: data.email };
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
     fetch(`${localIp}/lecture/${roomId}`, {
       method: "GET",
       headers: {
@@ -294,11 +386,14 @@ export default function ClassPage() {
 
     if (!isTeacher) {
       peer.on("call", (call) => {
+        setIsPlaying(false);
+        setIsStreamAvailable(false);
         call.answer();
         call.on("stream", (userVideoStream) => {
+          console.log("answering call", videoRef.current);
           videoRef.current.srcObject = userVideoStream;
           videoRef.current.addEventListener("loadedmetadata", () => {
-            videoRef.current.play();
+            setIsStreamAvailable(true);
           });
         });
       });
@@ -306,32 +401,34 @@ export default function ClassPage() {
 
     const handleOpen = (id) => {
       if (!roomJoined) {
-        socket.emit("join-room", roomId, isTeacher, id);
+        fetch(`${localIp}/connection`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: id,
+            roomId: roomId,
+          }),
+        })
+          .then((res) => {
+            console.log("sucess in joining req");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         setRoomJoined(true);
       }
-
-      socket.on("user-connected", (userId, isUserTeacher) => {
-        addStudent(userId);
-        if (isTeacher) {
-          joinNewStudent(userId, isUserTeacher);
-        }
-      });
-
-      socket.on("user-disconnected", (studentId) => {
-        removeStudent(studentId);
-      });
     };
 
     peer.on("open", handleOpen);
-
-    socket.on("chat-message", handleChatMessage);
-
     return () => {
-      socket.off("chat-message", handleChatMessage);
+      myRoom.unbind_all();
+      pusher.unsubscribe(roomId);
       peer.off("open", handleOpen);
       peer.destroy();
     };
-  }, []);
+  }, [userInfo]);
 
   return (
     <div className="class bg-gray-800 h-screen flex w-full overflow-hidden relative">
@@ -348,8 +445,25 @@ export default function ClassPage() {
       <div
         className={`video-container h-full  ${videoWidth} transition-all duration-500 ease-in-out flex flex-col`}
       >
-        <div className="h-4/5 my-auto px-4 flex justify-center">
+        <div className="h-4/5 my-auto px-4 flex justify-center relative">
           {" "}
+          {isPlaying ? (
+            ""
+          ) : (
+            <button
+              className="m-auto text-gray-300 absolute top-80 z-40 cursor-pointer"
+              onClick={playPauseVideo}
+            >
+              {isStreamAvailable ? (
+                <FontAwesomeIcon
+                  icon={faPlay}
+                  className="fa-6x"
+                ></FontAwesomeIcon>
+              ) : (
+                "No Stream"
+              )}
+            </button>
+          )}
           <video ref={videoRef} className="h-full bg-gray-900"></video>
         </div>
         <div className="h-1/5 flex justify-evenly text-white items-baseline">
@@ -385,12 +499,15 @@ export default function ClassPage() {
           {messages.map((message, index) => (
             <div
               key={index}
-              className="chat-message flex flex-col bg-blue-400 rounded-r-lg mr-4 mt-2 text-white"
+              className="chat-message flex flex-col bg-gray-100 rounded-r-lg mr-4 mt-2 text-gray-700 relative"
             >
               <div className="chat-message-sender font-bold pl-2 pt-2">
                 {message.sender}
               </div>
               <div className="chat-message-text p-2">{message.text}</div>
+              <div className="chat-message-text p-2 absolute right-0 bottom-0 text-sm">
+                {message.status}
+              </div>
             </div>
           ))}
           <div className="h-40"></div>

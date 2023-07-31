@@ -3,55 +3,72 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const cors = require("cors");
-const mongoose = require("mongoose")
-// ############ Untouchable code ############
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-  },
-});
+const mongoose = require("mongoose");
+const Pusher = require("pusher");
+const bodyParser = require("body-parser");
+
+app.use(bodyParser.json());
+app.use(cors());
 
 const connectionString = `mongodb+srv://afmtoday:OlxwPFCF0rLMnA3e@cluster0.edrrjyh.mongodb.net/mentee?retryWrites=true&w=majority`;
 
-mongoose.connect(connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose
+  .connect(connectionString, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log("Connected to MongoDB");
   })
   .catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
+    console.error("Error connecting to MongoDB:", err);
   });
 
+// ################ New Pusher Setup ################
 
-app.use(cors());
-
-io.on("connection", (socket) => {
-  socket.on("join-room", (roomId, isTeacher, userId) => {
-    console.log(
-      "joining room",
-      roomId,
-      "my id is:",
-      userId,
-      "isTeacher:",
-      isTeacher
-    );
-    socket.join(roomId);
-    socket.to(roomId).emit("user-connected", userId, isTeacher);
-  });
-
-  socket.on("disconnect", (userId) => {
-    socket.emit("user-disconnected", userId);
-  });
-
-  socket.on("chat-message-to-server", (message, roomId) => {
-    io.to(roomId).emit("chat-message", message);
-  });
+// Create a new instance of Pusher with your Pusher credentials
+const pusher = new Pusher({
+  appId: "1639415",
+  key: "20d590a2a5e4500caac1",
+  secret: "42ecf3e2bf8a165ddd94",
+  cluster: "ap2",
+  useTLS: true,
 });
 
-// ############ Untouchable code ############
+var users = [];
+for (let i = 0; i < 50; i++) {
+  users.push({
+    name: "User " + i.toString(),
+    email: "user " + i.toString() + "@example.com",
+  });
+}
+
+app.post("/connection", (req, res) => {
+  const { roomId, userId } = req.body;
+  console.log("user connected", userId, roomId);
+  pusher.trigger(roomId, "user-connected", { roomId: roomId, userId: userId });
+});
+
+app.post("/my-info", (req, res) => {
+  const { token } = req.body;
+  const randomIndex = Math.floor(Math.random() * 50);
+  res.json(users[randomIndex]);
+});
+
+app.post("/chat", (req, res) => {
+  const { roomId, message } = req.body;
+  console.log("message:", message, roomId);
+  pusher
+    .trigger(roomId, "chat-message", message)
+    .then(() => {
+      console.log("it works");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+// ############ New Pusher Setup ends ############
 
 // ########## sample data ##########
 const homePageData = {
