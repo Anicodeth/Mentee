@@ -168,8 +168,9 @@ const sampleLectureData = {
 
 const lecture1 = {
   id: "1",
-  title: "Introduction to Physics",
-  description: "An introductory lecture on the principles of physics",
+  title: "Fundamentals of Machine Learning and Deep Learning",
+  description:
+    "Learn the basics of machine learning and deep learning in this introductory lecture",
   thumbnail: "/images/course_1.jpg",
   instructor: {
     name: "John Doe",
@@ -187,11 +188,11 @@ const lecture2 = {
   id: "2",
   title: "Introduction to Chemistry",
   description: "A comprehensive lecture on the fundamentals of chemistry",
-  thumbnail: "images/course_2.jpg",
+  thumbnail: "https://files.indcareer.com/files/B.Ed%20Chemistry.jpg",
   instructor: {
     name: "Jane Smith",
     email: "jane.smith@example.com",
-    image_src: "images/person_2.png",
+    image_src: "/images/person_2.png",
   },
   date: "2023-07-05",
   startTime: "2:00 PM",
@@ -202,13 +203,14 @@ const lecture2 = {
 
 const lecture3 = {
   id: "3",
-  title: "Introduction to Biology",
-  description: "Explore the basics of biology in this introductory lecture",
-  thumbnail: "images/course_3.jpg",
+  title: "Physics 101",
+  description: "Explore the basics of physics in this introductory lecture",
+  thumbnail:
+    "https://www.everwallpaper.co.uk/cdn/shop/products/einstein-physics-mural-wallpaper-plain.jpg",
   instructor: {
     name: "Robert Johnson",
     email: "robert.johnson@example.com",
-    image_src: "images/person_3.png",
+    image_src: "/images/person_3.png",
   },
   date: "2023-07-10",
   startTime: "9:00 AM",
@@ -221,12 +223,13 @@ const lecture4 = {
   id: "4",
   title: "Introduction to Computer Science",
   description:
-    "Learn the basics of computer science in this introductory lecture",
-  thumbnail: "images/course_4.jpg",
+    "Have a deep understanding of computer science and its applications with this lecture",
+  thumbnail:
+    "https://e0.pxfuel.com/wallpapers/302/787/desktop-wallpaper-computer-science-background.jpg",
   instructor: {
     name: "Emily Wilson",
     email: "emily.wilson@example.com",
-    image_src: "images/person_4.png",
+    image_src: "/images/person_1.png",
   },
   date: "2023-07-15",
   startTime: "11:00 AM",
@@ -237,14 +240,14 @@ const lecture4 = {
 
 const lecture5 = {
   id: "5",
-  title: "Introduction to Mathematics",
+  title: "Advanced Mathematics",
   description:
-    "Discover the beauty of mathematics in this introductory lecture",
-  thumbnail: "images/course_5.jpg",
+    "Discover the beauty of mathematics in this advanced mathematics lecture",
+  thumbnail: "https://i.pngimg.me/thumb/f/720/46462cd16b7a4d589aec.jpg",
   instructor: {
     name: "Michael Brown",
     email: "michael.brown@example.com",
-    image_src: "images/person_5.png",
+    image_src: "/images/person_2.png",
   },
   date: "2023-07-20",
   startTime: "4:00 PM",
@@ -255,14 +258,15 @@ const lecture5 = {
 
 const lecture6 = {
   id: "6",
-  title: "Introduction to History",
+  title: "Class VIII History",
   description:
     "Uncover the fascinating world of history in this introductory lecture",
-  thumbnail: "images/course_6.jpg",
+  thumbnail:
+    "https://digitalline.in/images/course/1632567180class8-history.jpg",
   instructor: {
     name: "Sophia Davis",
     email: "sophia.davis@example.com",
-    image_src: "images/person_6.png",
+    image_src: "/images/person_3.png",
   },
   date: "2023-07-25",
   startTime: "3:00 PM",
@@ -276,11 +280,12 @@ const lecture7 = {
   title: "Introduction to Psychology",
   description:
     "Explore the human mind in this introductory lecture on psychology",
-  thumbnail: "images/course_7.jpg",
+  thumbnail:
+    "https://www.verywellmind.com/thmb/YVa2xBIFa7j8tiirG2IGIMXyk2A=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/psychology-schools-of-thought-2795247-nologo-86bcc1628ec84b23ac0c9ea3d0200f2b.png",
   instructor: {
     name: "Daniel Wilson",
     email: "daniel.wilson@example.com",
-    image_src: "images/person_7.png",
+    image_src: "/images/person_1.png",
   },
   date: "2023-07-30",
   startTime: "12:00 PM",
@@ -290,48 +295,15 @@ const lecture7 = {
 };
 
 const lecture8 = {
-  id: "8",
-  title: "Introduction to Literature",
-  description: "Discover the world of literature in this introductory lecture",
-  thumbnail: "images/course_8.jpg",
-  instructor: {
-    name: "Olivia Harris",
-    email: "olivia.harris@example.com",
-    image_src: "images/person_8.png",
-  },
-  date: "2023-08-05",
-  startTime: "10:00 AM",
-  endTime: "11:30 AM",
-  duration: 90,
-  price: 89.9,
-};
-
-const lecture9 = {
-  id: "9",
-  title: "Introduction to Economics",
-  description: "Learn the basics of economics in this introductory lecture",
-  thumbnail: "images/course_9.jpg",
-  instructor: {
-    name: "Matthew Anderson",
-    email: "matthew.anderson@example.com",
-    image_src: "images/person_9.png",
-  },
-  date: "2023-08-10",
-  startTime: "9:00 AM",
-  endTime: "10:30 AM",
-  duration: 90,
-  price: 79.9,
-};
-
-const lecture10 = {
   id: "10",
-  title: "Introduction to Art",
-  description: "Explore the world of art in this introductory lecture",
-  thumbnail: "images/course_10.jpg",
+  title: "Basic Drawing lecture",
+  description: "Explore the world of art in this lecture",
+  thumbnail:
+    "https://cdna.artstation.com/p/assets/images/images/028/239/990/large/gabriela-milanelli-67f1278f-57d6-4351-83bc-48c3410c2650.jpg",
   instructor: {
     name: "Ava Clark",
     email: "ava.clark@example.com",
-    image_src: "images/person_10.png",
+    image_src: "/images/person_2.png",
   },
   date: "2023-08-15",
   startTime: "11:00 AM",
@@ -349,8 +321,6 @@ const lectures = [
   lecture6,
   lecture7,
   lecture8,
-  lecture9,
-  lecture10,
 ];
 
 const profile1 = {

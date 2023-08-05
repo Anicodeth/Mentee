@@ -18,8 +18,6 @@ export default function ClassStatusPage(props) {
   const isActive = true;
   const isInstructor = false;
 
-  const socket = io.connect("http://localhost:5000");
-
   useEffect(() => {
     fetch(localIp + "/lecture/" + classId, {
       method: "GET",
@@ -39,6 +37,8 @@ export default function ClassStatusPage(props) {
       });
   }, []);
 
+  console.log(lectureDetail);
+
   return (
     <div className="class bg-gray-200 min-h-screen flex flex-col items-center ">
       <div className="w-full">
@@ -50,10 +50,10 @@ export default function ClassStatusPage(props) {
             <p className="text-2xl font-semibold text-gray-600">
               {lectureDetail.title}
             </p>
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-4 items-center self-start">
               {" "}
               <img
-                src={"/" + lectureDetail.instructor.image}
+                src={lectureDetail.instructor.image_src}
                 alt="instructor"
                 className="w-14"
               />
@@ -100,7 +100,11 @@ export default function ClassStatusPage(props) {
           </div>
         </div>
       ) : (
-        <p>loading...</p>
+        <div className="lecture-detail mx-auto mt-40 flex justify-center">
+          <div className="text-2xl font-semibold m-auto justify-center items-center ">
+            Loading...
+          </div>
+        </div>
       )}
     </div>
   );
