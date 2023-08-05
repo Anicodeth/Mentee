@@ -3,6 +3,7 @@ import LectureCard from "../components/lecture_card";
 import Footer from "../components/footer";
 import Profile from "../components/profile";
 import MenteeHeader from "../components/mentee_header";
+import { localIp } from "../constants";
 
 export default function Dashboard() {
   const [allLectures, setAllLectures] = useState([]);
@@ -14,7 +15,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     // we should fetch for both subscribed and created lectures and set their corresponding states
-    fetch("http://localhost:5000/lectures")
+    fetch(localIp + "/lectures")
       .then((res) => res.json())
       .then((data) => {
         setAllLectures(data);
@@ -25,7 +26,7 @@ export default function Dashboard() {
 
     // and the above fetch should be removed
 
-    fetch("http://localhost:5000/profile")
+    fetch(localIp + "/profile")
       .then((res) => res.json())
       .then((data) => {
         setProfileInfo(data);
@@ -57,7 +58,11 @@ export default function Dashboard() {
             image={profileInfo.image_src}
           />
         ) : (
-          <div>loading</div>
+          <div className="lecture-detail mx-auto mt-40 flex justify-center">
+            <div className="text-2xl font-semibold m-auto justify-center items-center ">
+              Loading...
+            </div>
+          </div>
         )}
 
         <div className="flex flex-col gap-2">
@@ -94,7 +99,11 @@ export default function Dashboard() {
               );
             })
           ) : (
-            <div>Loading...</div>
+            <div className="lecture-detail mx-auto mt-40 flex justify-center">
+              <div className="text-2xl font-semibold m-auto justify-center items-center ">
+                Loading...
+              </div>
+            </div>
           )}
         </div>
       </div>

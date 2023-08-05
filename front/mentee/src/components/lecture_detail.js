@@ -10,7 +10,7 @@ import { Link, useParams } from "react-router-dom";
 export default function LectureDetail(props) {
   let lectureId = useParams().id;
   return (
-    <div className="lecture-detail w-10/12 m-auto mt-10 bg-white lg:w-8/12">
+    <div className="lecture-detail w-10/12 m-auto mt-10 bg-white lg:w-6/12">
       <div className="lecture-image w-full">
         <img src={props.thumbnail} alt="lecture thumbnail" className="w-full" />
       </div>

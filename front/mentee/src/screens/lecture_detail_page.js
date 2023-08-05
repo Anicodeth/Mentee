@@ -3,13 +3,14 @@ import { useParams } from "react-router-dom";
 import LectureDetail from "../components/lecture_detail";
 import Footer from "../components/footer";
 import MenteeHeader from "../components/mentee_header";
+import { localIp } from "../constants";
 
 export default function LectureDetailPage() {
   const lectureId = useParams().id;
   const [lectureDetail, setLectureDetail] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/lecture/" + lectureId, {
+    fetch(localIp + "/lecture/" + lectureId, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +45,11 @@ export default function LectureDetailPage() {
           price={lectureDetail.price}
         />
       ) : (
-        <div>loading...</div>
+        <div className="lecture-detail mx-auto mt-40 flex justify-center">
+          <div className="text-2xl font-semibold m-auto justify-center items-center ">
+            Loading...
+          </div>
+        </div>
       )}
       <div className="">
         <Footer />
