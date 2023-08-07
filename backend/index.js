@@ -18,7 +18,7 @@ const mongoose = require("mongoose")
 // ############ Untouchable code ############
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
@@ -131,6 +131,7 @@ const homePageData = {
 // Home page route
 app.get("/", (req, res) => {
   // ... Handle home page data ...
+  res.json({sup:"sup"});
 });
 
 // Class routes (using classRoutes)

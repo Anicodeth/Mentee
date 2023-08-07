@@ -207,7 +207,7 @@ router.get('/', authMiddleware, userController.getAllUsers);
 router.get('/me', authMiddleware, userController.getUserById);
 
 // Update a user by their ID (requires authentication)
-router.put('/', authMiddleware, userController.updateUserById);
+router.put('/update', authMiddleware, userController.updateUserById);
 
 // Delete a user by their ID (requires authentication)
 router.delete('/', authMiddleware, userController.deleteUserById);
