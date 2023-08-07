@@ -8,7 +8,11 @@ import Home from "./screens/home.js";
 import LoginPage from "./screens/login_page.js";
 import ClassPage from "./screens/class_page.js";
 import ClassStatusPage from "./screens/class_status_page.js";
-import ClassesList from "./screens/classes_list.js";
+import LecturesHomePage from "./screens/lecture_home_page";
+import LectureDetailPage from "./screens/lecture_detail_page";
+import Dashboard from "./screens/dashboard";
+import ProfilePage from "./screens/profile_page";
+import CreateLecture from "./components/create_lecture";
 
 function App() {
   return (
@@ -18,7 +22,11 @@ function App() {
         <Route path="login" element={<LoginPage />} />
         <Route path="class/:id/:isteacher" element={<ClassPage />} />
         <Route path="status/:id" element={<ClassStatusPage />} />
-        <Route path="classes" element={<ClassesList />} />
+        <Route path="lectures" element={<LecturesHomePage />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="lecture/:id" element={<LectureDetailPage />} />
+        <Route path="create" element={<CreateLecture />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>
     </BrowserRouter>

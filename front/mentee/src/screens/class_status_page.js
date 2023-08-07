@@ -3,77 +3,109 @@ import io from "socket.io-client";
 import { Link } from "react-router-dom";
 
 import { useParams } from "react-router-dom";
+import { PrimaryButton } from "../components/buttons";
 
-import { useState } from "react";
-
-// here is the intermideate page before joining the class
-// we will add a description of the class and a button to join the class and status of the class
-// we will also add a button to go back to the classes page
-
-// we will have props for the class name, description and status as well as the class id
+import { useState, useEffect } from "react";
+import { localIp } from "../constants";
+import Footer from "../components/footer";
+import MenteeHeader from "../components/mentee_header";
 
 export default function ClassStatusPage(props) {
-  // const { classId, className, classDescription, classStatus } = props;
-
-  // for now we will hard code the class id, name, description and status
-  // we will add the functionality to get the class data from the backend later
-
+  const [lectureDetail, setLectureDetail] = useState(null);
   const { id } = useParams();
-  console.log(props);
+
   const classId = id.toString();
-  const className = "Introduction to React JS: Lecture One";
-  const classDescription = "Description of the class.";
-  const classStatus = "Active";
-  const socket = io.connect("http://localhost:5000");
+  const isActive = true;
+  const isInstructor = false;
 
-  // we will add the functionality to join the class
-  // we will use the class id to join the class
+  useEffect(() => {
+    fetch(localIp + "/lecture/" + classId, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        return res.json();
+      })
+      .then((data) => {
+        setLectureDetail(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  function joinRoom() {
-    if (classStatus === "Inactive") {
-      alert("This class is not active yet.");
-      return;
-    }
-
-    // now we redirect to the class page using router
-
-    // we will add the functionality to redirect to lecture streaming and chat page
-  }
+  console.log(lectureDetail);
 
   return (
-    <div className="class bg-gray-200 min-h-screen flex justify-center items-center">
-      <div className="class-content bg-white p-8 rounded-lg shadow-lg flex flex-col min-w-1/2 ">
-        <h2 className="class-name text-2xl font-normal text-gray-800 mb-4">
-          {className}
-        </h2>
-
-        <p className="class-description text-xl mb-6 text-gray-600">
-          {classDescription}
-        </p>
-
-        <div className="class-status text-lg mb-4 text-gray-700 font-bold">
-          Status: <span className="text-green-500">{classStatus}</span>
-        </div>
-
-        <div className="flex justify-around">
-          <Link to={classStatus === "Active" ? `/class/${classId}/t` : ""}>
-            <button
-              onClick={joinRoom}
-              className="join-button bg-white border border-gray-400 rounded px-4 py-2 flex cursor-pointer hover:bg-gray-700 hover:text-gray-100 transition delay-400 m-auto"
-            >
-              Join as Teacher
-            </button>
-          </Link>
-          <Link to={classStatus === "Active" ? `/class/${classId}/f` : ""}>
-            <button
-              onClick={joinRoom}
-              className="join-button bg-white border border-gray-400 rounded px-4 py-2 flex cursor-pointer hover:bg-gray-700 hover:text-gray-100 transition delay-400 m-auto"
-            >
-              Join as Student
-            </button>
-          </Link>
-        </div>
+    <div className="class bg-gray-200 min-h-screen flex flex-col items-center ">
+      <div className="w-full">
+        <MenteeHeader />
       </div>
+      {lectureDetail ? (
+        <div className="flex flex-col lg:flex-row lg:gap-20  mt-40">
+          <div className="bg-white px-12 py-8 flex flex-col gap-4 flex-wrap items-center rounded-lg">
+            <p className="text-2xl font-semibold text-gray-600">
+              {lectureDetail.title}
+            </p>
+            <div className="flex gap-4 items-center self-start">
+              {" "}
+              <img
+                src={lectureDetail.instructor.image_src}
+                alt="instructor"
+                className="w-14"
+              />
+              <div>
+                <p className="text-xl font-semibold text-gray-600">
+                  {lectureDetail.instructor.name}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {lectureDetail.instructor.position}
+                </p>
+              </div>
+            </div>
+            <div className="w-full mt-4 text-gray-800 text-lg">
+              <p>Date: {lectureDetail.date}</p>
+              <p>Duration: {lectureDetail.duration} minutes</p>
+            </div>
+          </div>
+          <div className="flex flex-col items-center py-8 gap-4 justify-center">
+            <p
+              className={`${
+                isActive ? "text-green-600" : "text-red-500"
+              } text-lg font-semibold`}
+            >
+              {isActive ? "Active" : "Inactive"}
+            </p>
+            <p className="text-normal">
+              {isActive
+                ? "The class has started, you can join now."
+                : "The class is not active yet."}
+            </p>
+            <Link to={`/class/${lectureDetail.id}/${isInstructor ? "t" : "f"}`}>
+              <PrimaryButton
+                text={isInstructor ? "Host Class" : "Join Class"}
+              />
+            </Link>
+
+            {/* temporary button */}
+            <Link to={`/class/${lectureDetail.id}/t`}>
+              <PrimaryButton text={"Host Class (for trial)"} />
+            </Link>
+            <div className="fixed bottom-0 w-full left-0">
+              <Footer />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="lecture-detail mx-auto mt-40 flex justify-center">
+          <div className="text-2xl font-semibold m-auto justify-center items-center ">
+            Loading...
+          </div>
+        </div>
+      )}
     </div>
   );
 }

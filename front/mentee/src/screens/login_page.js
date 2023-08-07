@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { PrimaryButton } from "../components/buttons";
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
 
@@ -61,32 +62,30 @@ export default function LoginPage() {
         </div>
 
         <div className="flex flex-col p-4 items-center w-full">
-          {fields.map((field, index) =>{
-            console.log(field)
-            if (field.showWhenSignUp) { return (
-              <div key={index} className="w-full">
-                <label className="ml-4 mb-2 block relative top-5 bg-gray-100 w-fit text-gray-500 px-2 shadow shadow-md rounded">
-                  {field.label}
-                </label>
-                <input
-                  className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
-                  type={field.type}
-                  placeholder={field.placeholder}
-                  id={field.id}
-                />
-              </div>
-            )} return ( null )
-          }
-          )}
+          {fields.map((field, index) => {
+            console.log(field);
+            if (field.showWhenSignUp) {
+              return (
+                <div key={index} className="w-full">
+                  <label className="ml-4 mb-2 block relative top-5 bg-gray-100 w-fit text-gray-500 px-2 shadow shadow-md rounded">
+                    {field.label}
+                  </label>
+                  <input
+                    className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    id={field.id}
+                  />
+                </div>
+              );
+            }
+            return null;
+          })}
 
-          <div className="w-full mb-2 flex flex-col items-center">
-            <button className="flex border border-gray-400 px-20 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40 mt-5 ">
-              {isLogin ? "Log In" : "Sign Up"}
-            </button>
-            <Link to="/classes">
-              <button className="flex border w-full border-gray-400 px-5 py-2 rounded hover:bg-gray-700 hover:text-gray-100 transition delay-40 mt-5">
-                Skip for now
-              </button>
+          <div className="w-full mb-2 flex flex-col items-center gap-2 mt-4">
+            <PrimaryButton text={isLogin ? "Log In" : "Sign Up"} />
+            <Link to="/lectures">
+              <PrimaryButton text={"Skip for now"} />
             </Link>
           </div>
 
@@ -98,7 +97,9 @@ export default function LoginPage() {
 
           <div>
             <p className="text-gray-600">
-              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              {isLogin
+                ? "Don't have an account? "
+                : "Already have an account? "}
               <Link className="text-blue-500" to="" onClick={toSignUp}>
                 {isLogin ? "Sign Up" : "Log In"}
               </Link>
