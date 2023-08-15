@@ -85,7 +85,7 @@ export default function Home() {
         getStartedButton={homePageData.getStartedButton}
         heroImage={homePageData.heroImage}
       />
-      <div className="social-logos flex-column justify-center align-center ">
+      {/* <div className="social-logos flex-column justify-center align-center ">
         <div className="flex justify-center text-2xl text-gray-800 font-bold">
           Get Us On
         </div>
@@ -100,7 +100,7 @@ export default function Home() {
             );
           })}
         </ul>
-      </div>
+      </div> */}
 
       <div className="experts mt-28">
         <div className="flex flex-col justify-center align-center gap-4">
