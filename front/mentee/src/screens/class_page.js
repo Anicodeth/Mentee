@@ -20,40 +20,31 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function ClassPage() {
-  const [chatWidth, setChatWidth] = useState("0");
+  const [chatPos, setChatPos] = useState("-right-full");
   const [videoWidth, setVideoWidth] = useState("w-full");
   const [roomJoined, setRoomJoined] = useState(false);
   const [messages, setMessages] = useState([]);
-
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
-
   const roomId = useParams().id;
   const { isteacher } = useParams();
   const isTeacher = isteacher === "t";
-
   const videoRef = useRef(null);
+  const messageBoxRef = useRef(null);
   const peerRef = useRef(null);
-
   const [videoStream, setVideoStream] = useState(null);
   const [screenStream, setScreenStream] = useState(null);
-
-  const [lectureDetails, setLectureDetails] = useState({});
-  const [isVideoStream, setIsVideoStream] = useState(true);
-
   const [currentStudents, setCurrentStudents] = useState([]);
   const [userInfo, setUserInfo] = useState({ name: "unknown" });
-
   const [isStreamAvailable, setIsStreamAvailable] = useState(false);
 
-  console.log(userInfo, ">......");
   const toggleChat = () => {
-    if (chatWidth === "4/12") {
-      setChatWidth("0");
+    if (chatPos === "right-0") {
+      setChatPos("-right-full");
       setVideoWidth("w-full");
     } else {
-      setChatWidth("4/12");
-      setVideoWidth("w-8/12");
+      setChatPos("right-0");
+      setVideoWidth("w-9/12");
     }
   };
 
@@ -90,19 +81,9 @@ export default function ClassPage() {
     );
   }
 
-  const handleChatMessage = useCallback(
-    (message) => {
-      if (message !== messages[messages.length - 1]) {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      }
-    },
-    [messages]
-  );
-
   function addMessage() {
-    const messageBox = document.getElementById("message");
     const sender = userInfo.name;
-    const text = messageBox.value;
+    const text = messageBoxRef.value;
 
     const message = {
       sender: sender,
@@ -111,7 +92,7 @@ export default function ClassPage() {
     };
 
     setMessages((prevMessages) => [...prevMessages, message]);
-    messageBox.value = "";
+    messageBoxRef.value = "";
 
     fetch(`${localIp}/chat`, {
       method: "POST",
@@ -285,7 +266,6 @@ export default function ClassPage() {
   }
 
   function sendStreamToAll(stream) {
-    console.log(currentStudents);
     currentStudents.forEach((studentId) => {
       peerRef.current.call(studentId, stream);
     });
@@ -293,19 +273,19 @@ export default function ClassPage() {
 
   function joinNewStudent(userId, isUserTeacher) {
     if (videoRef.current.srcObject) {
-      console.log("calling the new student");
       peerRef.current.call(userId, videoRef.current.srcObject);
     }
   }
+
   useEffect(() => {
+    // initialize pusher with your app key and cluster
     const pusher = new Pusher("20d590a2a5e4500caac1", {
       cluster: "ap2",
     });
 
+    // subscribe to your channel which is the same as your room
     const myRoom = pusher.subscribe(roomId);
-
     myRoom.bind("user-connected", (userInfo) => {
-      console.log("new user just connected");
       const { userId, isUserTeacher } = userInfo;
       addStudent(userId);
       if (isTeacher) {
@@ -313,20 +293,20 @@ export default function ClassPage() {
       }
     });
 
+    // remove student from the list when disconnected
     myRoom.bind("user-disconnected", (userInfo) => {
       const { studentId } = userInfo;
       removeStudent(studentId);
     });
 
+    // handle when a new message is sent to the chat room
     myRoom.bind("chat-message", (message) => {
-      console.log("chat from pusher:", message, userInfo);
-
       if (message.sender === userInfo.name) {
-        console.log("here in add message");
         const date = new Date();
         message.status =
           (date.getHours() % 12).toString() +
           ":" +
+          (date.getMinutes() < 10 ? "0" : "") +
           date.getMinutes().toString() +
           (date.getHours() > 11 ? " PM" : " AM");
 
@@ -340,6 +320,7 @@ export default function ClassPage() {
         message.status =
           (date.getHours() % 12).toString() +
           ":" +
+          (date.getMinutes() < 10 ? "0" : "") +
           date.getMinutes().toString() +
           (date.getHours() > 11 ? " PM" : " AM");
 
@@ -347,6 +328,7 @@ export default function ClassPage() {
       }
     });
 
+    // get the user info from the server
     if (userInfo.name === "unknown") {
       fetch(`${localIp}/my-info`, {
         method: "POST",
@@ -358,11 +340,9 @@ export default function ClassPage() {
         }),
       })
         .then((res) => {
-          console.log("........", res);
           return res.json();
         })
         .then((data) => {
-          console.log("hereee");
           setUserInfo((prev) => {
             return { ...prev, name: data.name, email: data.email };
           });
@@ -372,6 +352,7 @@ export default function ClassPage() {
         });
     }
 
+    // get the lecture details from the server
     fetch(`${localIp}/lecture/${roomId}`, {
       method: "GET",
       headers: {
@@ -398,17 +379,18 @@ export default function ClassPage() {
         console.log(err);
       });
 
+    // initialize peer server and set the peerRef that will be used to call other users
     const peer = new Peer();
-
     peerRef.current = peer;
 
+    // if the user is not a teacher, then when called answer the call and set the video stream
     if (!isTeacher) {
       peer.on("call", (call) => {
         setIsPlaying(false);
         setIsStreamAvailable(false);
+
         call.answer();
         call.on("stream", (userVideoStream) => {
-          console.log("answering call", videoRef.current);
           videoRef.current.srcObject = userVideoStream;
           videoRef.current.addEventListener("loadedmetadata", () => {
             setIsStreamAvailable(true);
@@ -417,6 +399,7 @@ export default function ClassPage() {
       });
     }
 
+    // when the peer is open and the user hasn't joined a room, send a request to the server to join the room
     const handleOpen = (id) => {
       if (!roomJoined) {
         fetch(`${localIp}/connection`, {
@@ -439,8 +422,11 @@ export default function ClassPage() {
       }
     };
 
+    // when the peer is open, set the peer id and send a request to the server to join the room
     peer.on("open", handleOpen);
     return () => {
+      // when the component is unmounted, unsubscribe from the pusher channel, destroy the peer connection and unbind all the events
+
       myRoom.unbind_all();
       pusher.unsubscribe(roomId);
       peer.off("open", handleOpen);
@@ -450,18 +436,8 @@ export default function ClassPage() {
 
   return (
     <div className="class bg-gray-800 h-screen flex w-full overflow-hidden relative">
-      {/* <div
-        className={`flex justify-center align-center py-8 text-xl font-semibold text-gray-100 fixed bg-black opacity-80 bottom-0 gap-8 transition-all duration-500 ease-in-out ${videoWidth}`}
-      >
-        <div className="text-xl font-bold">
-          {lectureDetails === undefined
-            ? "Error loading Lecture data"
-            : lectureDetails.title}
-        </div>
-      </div> */}
-
       <div
-        className={`video-container h-full w-full relative right-0 ${videoWidth} transition-all duration-500 ease-in-out flex flex-col`}
+        className={`video-container h-full relative ${videoWidth} transition-all duration-500 ease-in-out flex flex-col`}
       >
         <div className="h-4/5 my-auto px-4 flex justify-center relative">
           {" "}
@@ -500,9 +476,7 @@ export default function ClassPage() {
         </div>
       </div>
       <div
-        className={`chat-container bg-gray-600 w-${chatWidth} transition-all duration-500 ease-in-out relative border border-md border-gray-900 ${
-          chatWidth === "0" ? "-right-full" : "right-0"
-        }`}
+        className={`chat-container bg-gray-600 w-3/12 fixed ${chatPos} h-screen transition-all duration-500 ease-in-out border border-md border-gray-900`}
       >
         <button
           className={
@@ -512,7 +486,7 @@ export default function ClassPage() {
         >
           CHAT
         </button>
-        <div className="chat-header flex justify-center py-8 bg-gray-200 text-gray-700 text-xl font-bold items-center relative ">
+        <div className="chat-header flex justify-center py-8 bg-gray-200 text-gray-700 text-xl font-bold items-center ">
           <FontAwesomeIcon
             icon={faComments}
             className="mr-2 text-blue-600 fa-2x"
@@ -538,6 +512,7 @@ export default function ClassPage() {
         </div>
         <div className="chat-input flex absolute bottom-0 w-full">
           <input
+            ref={messageBoxRef}
             className="w-full border border-gray-100  px-5 py-3 text-lg focus:outline-none focus:border-gray-400 bg-gray-200"
             type="text"
             placeholder="Enter your message"
