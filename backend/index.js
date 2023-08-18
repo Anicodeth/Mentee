@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 const classRoutes = require("./routes/classRoutes");
 const userRoutes = require("./routes/userRoutes"); 
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 const { swaggerUi, specs } = require('./swagger'); 
 
 
@@ -145,6 +146,10 @@ app.use('/enrollments', enrollmentRoutes);
 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+
+//play ground
+app.use('/payment', paymentRoutes)
 
 
 server.listen(5000, () => console.log("server is running on port 5000"))
