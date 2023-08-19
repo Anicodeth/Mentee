@@ -37,6 +37,8 @@ export default function ClassPage() {
   const [currentStudents, setCurrentStudents] = useState([]);
   const [userInfo, setUserInfo] = useState({ name: "unknown" });
   const [isStreamAvailable, setIsStreamAvailable] = useState(false);
+  const [isVideoStream,setIsVideoStream] = useState(false);
+  const [lectureDetails,setLectureDetails] = useState({});
 
   const toggleChat = () => {
     if (chatPos === "right-0") {
