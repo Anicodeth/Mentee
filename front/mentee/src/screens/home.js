@@ -20,7 +20,7 @@ const getTestimonials = (image_src, name, num_of_stars, testimonial_text) => {
   image_src = null;
   return (
     <div className="flex justify-center align-center gap-10 mt-10">
-      <div className="flex flex-col justify-center align-center gap-4 p-10 bg-gray-100 rounded-2xl mb-10 shadow shadow-2xl">
+      <div className="flex flex-col justify-center align-center gap-4 p-10 bg-gray-100 rounded-2xl mb-10  shadow-2xl">
         {image_src ? (
           <img
             className="w-40 rounded-full m-auto"
@@ -33,7 +33,7 @@ const getTestimonials = (image_src, name, num_of_stars, testimonial_text) => {
           </div>
         )}
         <p className="font-semibold text-gray-700 m-auto">{name}</p>
-        <p className="text-gray-700 m-auto text-gray-500 w-56">
+        <p className=" m-auto text-gray-500 w-56">
           {testimonial_text}
         </p>
 
@@ -46,10 +46,10 @@ const getTestimonials = (image_src, name, num_of_stars, testimonial_text) => {
 const getExperts = (image_src, name, position) => {
   return (
     <div className="flex justify-center align-center gap-10 mt-10">
-      <div className="flex flex-col justify-center align-center gap-4 p-10 bg-gray-100 rounded-2xl mb-10 shadow shadow-2xl">
+      <div className="flex flex-col justify-center align-center gap-4 p-10 bg-gray-100 rounded-2xl mb-10  shadow-2xl">
         <img className="w-40 rounded-full m-auto" alt="" src={image_src}></img>
         <p className="font-semibold text-gray-700 m-auto">{name}</p>
-        <p className="font-medium text-gray-700 m-auto text-gray-500 flex justify-center w-40 text-center">
+        <p className="font-medium  m-auto text-gray-500 flex justify-center w-40 text-center">
           {position}
         </p>
       </div>
@@ -129,7 +129,7 @@ export default function Home() {
               featureCards.indexOf(card) % 2 === 1
                 ? "md:flex-row"
                 : "md:flex-row-reverse"
-            } p-4 m-10 gap-10 mt-20 justify-center mb-20 lg:w-8/12 m-auto`}
+            } p-4  gap-10 mt-20 justify-center mb-20 lg:w-8/12 m-auto`}
           >
             <div className="side-note md:px-0 px-10 items-center flex flex-col justify-center gap-10">
               <h2 className="text-2xl text-gray-800 font-bold">{card.title}</h2>
@@ -172,10 +172,10 @@ export default function Home() {
 
       <div
         className="get-started-section bg-white flex flex-col-reverse 
-      items-center shadow-2xl w-fit px-4 pb-4 w-8/12 rounded mt-20 md:flex-row md:justify-evenly mx-4 lg:w-9/12 lg:mx-auto"
+      items-center shadow-2xl  px-4 pb-4 w-8/12 rounded mt-20 md:flex-row md:justify-evenly mx-4 lg:w-9/12 lg:mx-auto"
       >
         <div className="flex flex-col gap-8 justify-center items-center">
-          <h1 className="md:text-3xl text-2xl text-gray-800 font-semibold text-gray-700">
+          <h1 className="md:text-3xl text-2xl  font-semibold text-gray-700">
             Get started with Mentee today
           </h1>
           <p className="text-lg text-gray-700 text-light">
