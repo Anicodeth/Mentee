@@ -5,28 +5,28 @@ import { PrimaryButton } from "../components/buttons";
 import { ThreeCircles } from  'react-loader-spinner'
 
 
+import auth from "../services/authService";
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [role,setRole] = useState("student");
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+  const loginPasswordRef = useRef(null);
+  const loginEmailRef = useRef(null);
   const confirm_passwordRef = useRef(null);
-  // there are going to be 3 states of the form (takingInput, inProgress, done)
-    // takingInput: the user is typing in the form
-    // inProgress: the user has submitted the form and we are waiting for the server to respond
-    // done: the server has responded and we are ready to move on
-      // for this purpose, we use enums
-    const [formState, setFormState] = useState("takingInput");
+
+  const [formState, setFormState] = useState("takingInput");
     // we need to store the error message from the server
-    const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
     // we need to store the success message from the server
-    const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
     // we need to store the data from the server
-    const [data, setData] = useState(null);
+  const [data, setData] = useState(null);
     // we need to store the token from the server
-    const [token, setToken] = useState(null);
+  const [token, setToken] = useState(null);
 
 
   const fields = [
@@ -51,15 +51,24 @@ export default function LoginPage() {
       type: "email",
       placeholder: "Enter your email",
       id: "email",
-      showWhenSignUp: true,
+      showWhenSignUp: !isLogin,
 
 ref:  emailRef  },
+      {
+          label: "Email",
+          type: "email",
+          placeholder: "Enter your email",
+          id: "login-email",
+          showWhenSignUp: isLogin,
+
+          ref:  loginEmailRef  },
+
     {
-      label: isLogin ? "Password" : "Create Password",
+      label: "Create Password",
       type: "password",
       placeholder: "Enter your password",
       id: "password",
-      showWhenSignUp: true,
+      showWhenSignUp: !isLogin,
 
 ref:  passwordRef  },
     {
@@ -70,6 +79,15 @@ ref:  passwordRef  },
       showWhenSignUp: !isLogin,
         ref:confirm_passwordRef
     },
+      {
+          label: "Create Password",
+          type: "password",
+          placeholder: "Enter your password",
+          id: "login-password",
+          showWhenSignUp: isLogin,
+
+          ref:  loginPasswordRef  },
+
   ];
 
   const getFormState = () => {
@@ -83,31 +101,113 @@ ref:  passwordRef  },
           wrapperStyle
           wrapperClass
       />
-    } else if (formState === "done") {
-      return <p className="text-green-600">You have Signed up successfully</p>
     } else if (formState === "error") {
-      return <p className="text-red-600">Error message</p>
+      return <p className="text-red-600">{errorMessage}</p>
     } else {
       return null;
     }
   }
 
-const SignUp = () => {
-    setFormState("done");
-}
+    const validateSignUp = () => {
+        if (
+            !firstNameRef.current.value ||
+            !lastNameRef.current.value ||
+            !emailRef.current.value ||
+            !passwordRef.current.value ||
+            !confirm_passwordRef.current.value ||
+            passwordRef.current.value !== confirm_passwordRef.current.value
+        ) {
+            setFormState("error");
+            setErrorMessage("Please fill in all required fields and make sure passwords match.");
+            return false;
+        }
+        return true;
+    };
 
+    // Function to validate input fields before login
+    const validateLogin = () => {
+        if (!loginEmailRef.current.value || !loginPasswordRef.current.value) {
+            setFormState("error");
+            setErrorMessage("Please fill in both email and password fields.");
+            return false;
+        }
+        return true;
+    };
+
+    const SignUp = () => {
+    setFormState("inProgress");
+        if (!validateSignUp()) {
+            return;
+        }
+
+    const firstName = firstNameRef.current.value;
+    const lastName = lastNameRef.current.value;
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+
+    const confirmPassword = confirm_passwordRef.current.value;
+    const data = {
+        name: firstName,
+        email: email,
+        password: password,
+        role: role,
+    };
+    auth.register(data)
+        .then((response) => {
+            if(response === "success"){
+            setFormState("done");
+            window.location.href = "/dashboard";
+            }
+            else{
+                setFormState("error");
+                setErrorMessage(response)
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            setFormState("error");
+            setErrorMessage(error.message);
+        });
+}
 const LogIn = () => {
-  setFormState("inProgress");
+    setFormState("inProgress");
+    if (!validateLogin()) {
+        return;
+    }
+
+    const email = loginEmailRef.current.value;
+    const password = loginPasswordRef.current.value;
+    const data = {
+        email: email,
+        password: password,
+    };
+    auth.login(data)
+        .then((response) => {
+            if(response === "success"){
+                setFormState("done");
+                window.location.href = "./dashboard";
+            }
+            else{
+                setFormState("error");
+                setErrorMessage(response);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            setFormState("error");
+            setErrorMessage(error.message);
+        });
 }
 
 
   const toSignUp = () => {
-    setIsLogin(!isLogin);
+      setErrorMessage("");
+      setIsLogin(!isLogin);
   };
 
-    useEffect(() => {
-
-    }, []);
+    function onChangeValue(event) {
+        setRole(event.target.value);
+    }
 
   return (
     <div className="h-screen bg-gray-200 flex justify-center items-center">
@@ -125,7 +225,6 @@ const LogIn = () => {
 
         <div className="flex flex-col p-4 items-center w-full">
           {fields.map((field, index) => {
-            console.log(field);
             if (field.showWhenSignUp) {
               return (
                 <div key={index} className="w-full my-3">
@@ -133,8 +232,9 @@ const LogIn = () => {
                     {field.label}
                   </label>
                   <input
-                      ref={field.ref}
                     className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
+                      autoComplete={isLogin ? "on" : "off"}
+                      ref={field.ref}
                     type={field.type}
                     placeholder={field.placeholder}
                     id={field.id}
@@ -144,9 +244,34 @@ const LogIn = () => {
             }
             return null;
           })}
+            <div onChange={onChangeValue} className={`w-full mb-8 ${isLogin?"hidden":"block"}`}>
+                <div className="mb-2 block relative top-1 bg-gray-200 w-fit text-gray-700 px-2 ">
+                    Role
+                </div>
+                <div className="flex justify-center gap-8 border border-gray-300 py-2 rounded">
+                    <label className="inline-flex items-center">
+                        <input
+                            type="radio"
+                            value="student"
+                            name="role"
+                            className="form-radio text-blue-500 h-5 w-5"
+                        />
+                        <span className="ml-2 text-gray-700">Student</span>
+                    </label>
+                    <label className="inline-flex items-center">
+                        <input
+                            type="radio"
+                            value="instructor"
+                            name="role"
+                            className="form-radio text-blue-500 h-5 w-5"
+                        />
+                        <span className="ml-2 text-gray-700">Instructor</span>
+                    </label>
+                </div>
+            </div>
 
-          <div className="w-full mb-2 flex flex-col items-center gap-2 mt-4">
-            {/* <PrimaryButton text={isLogin ? "Log In" : "Sign Up"} /> */}
+
+            <div className="w-full mb-2 flex flex-col items-center gap-2 mt-4">
               <PrimaryButton text={isLogin?"Log in":"Sign Up"} onPress={isLogin?LogIn:SignUp} />
           </div>
 
@@ -166,13 +291,18 @@ const LogIn = () => {
               </Link>
             </p>
           </div>
-          <div className="mt-4 py-3 -mb-10">
+          <div className="mt-4 py-3 -mb-10 w-96">
             {getFormState()}
-
             {/*<p className="text-green-600">Success message</p>*/}
           </div>
         </div>
       </div>
     </div>
   );
+
+
 }
+
+// validation external -- not yet
+// server error
+// go to dashboard from login and signup
