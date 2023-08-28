@@ -15,6 +15,7 @@ const router = express.Router();
  * components:
  *   schemas:
  *     Payment:
+ * 
  *       type: object
  *       properties:
  *         userId:
