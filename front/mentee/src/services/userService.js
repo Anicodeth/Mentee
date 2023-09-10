@@ -15,3 +15,7 @@ export async function getMe() {
             console.log(err);
         });
 }
+
+export function checkLogin() {
+    return !!window.localStorage.getItem("token");
+}

@@ -35,3 +35,17 @@ export function getAllClasses(){
             console.log(err);
         });
 }
+
+export async function getClass(classId){
+    return fetch(localIp + "/classes/" + classId, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then((res) => res.json())
+        .then((data) => data)
+        .catch((err) => {
+            console.log(err);
+        });
+}

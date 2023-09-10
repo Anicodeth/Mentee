@@ -1,6 +1,6 @@
 import React from "react";
 import io from "socket.io-client";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 import { useParams } from "react-router-dom";
 import { PrimaryButton } from "../components/buttons";
@@ -9,16 +9,26 @@ import { useState, useEffect } from "react";
 import { localIp } from "../constants";
 import Footer from "../components/footer";
 import MenteeHeader from "../components/mentee_header";
+import {checkLogin} from "../services/userService";
 
 export default function ClassStatusPage(props) {
   const [lectureDetail, setLectureDetail] = useState(null);
   const { id } = useParams();
+  const history = useNavigate();
 
   const classId = id.toString();
   const isActive = true;
   const isInstructor = false;
 
   useEffect(() => {
+    const isLoggedIn = checkLogin();
+
+    if(!isLoggedIn){
+      console.log("not logged in");
+      history("/login");
+      return
+    }
+    
     fetch(localIp + "/lecture/" + classId, {
       method: "GET",
       headers: {

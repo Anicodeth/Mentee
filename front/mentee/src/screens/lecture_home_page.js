@@ -4,10 +4,13 @@ import MenteeHeader from "../components/mentee_header.js";
 import LectureCard from "../components/lecture_card";
 import { localIp } from "../constants";
 import {getAllClasses, searchClasses as searchClassesService} from "../services/classesService" ;
+import {checkLogin} from "../services/userService";
+import {useNavigate} from "react-router-dom";
 
 export default function LecturesHomePage() {
   const [allLectures, setAllLectures] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("");
+    const history = useNavigate();
 
   const searchClasses = async (term)=> {
       try {
@@ -20,6 +23,13 @@ export default function LecturesHomePage() {
   }
 
   useEffect(() => {
+      const isLoggedIn = checkLogin();
+
+      if(!isLoggedIn){
+          console.log("not logged in");
+          history("/login");
+          return
+      }
       try {
           getAllClasses().then(allClasses=>{
               setAllLectures(allClasses);

@@ -1,30 +1,31 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 import LectureDetail from "../components/lecture_detail";
 import Footer from "../components/footer";
 import MenteeHeader from "../components/mentee_header";
 import { localIp } from "../constants";
+import {getClass} from "../services/classesService";
+import {checkLogin} from "../services/userService";
 
 export default function LectureDetailPage() {
   const lectureId = useParams().id;
   const [lectureDetail, setLectureDetail] = useState(null);
+  const history = useNavigate();
 
   useEffect(() => {
-    fetch(localIp + "/lecture/" + lectureId, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        setLectureDetail(data);
-      })
-      .catch((err) => {
-        console.log(err);
+      const isLoggedIn = checkLogin();
+
+      if(!isLoggedIn){
+          console.log("not logged in");
+          history("/login");
+          return
+      }
+      getClass(lectureId).then(classDetail => {
+          setLectureDetail(classDetail);
+      }).catch(e=>{
+          console.log(e);
       });
+
   }, []);
   // title, image, instructorName, date, duration, description, isActive
   return (
