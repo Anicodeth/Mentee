@@ -7,8 +7,36 @@ import { localIp } from "../constants";
 export default function LecturesHomePage() {
   const [allLectures, setAllLectures] = useState(null);
 
+    const searchClasses = (term) => {
+
+        fetch(localIp+"/classes/search",{
+            method:"POST",
+            headers:{
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token")
+            },
+            body:JSON.stringify({
+                "query":term
+            })
+        }).then((res) => {
+            console.log(res);
+            return res.json()})
+            .then((data) => {
+                console.log(data);
+                setAllLectures(data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });}
+
   useEffect(() => {
-    fetch(localIp + "/lectures")
+    fetch(localIp + "/classes",{
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        }
+    })
       .then((res) => res.json())
       .then((data) => {
         setAllLectures(data);
@@ -20,7 +48,7 @@ export default function LecturesHomePage() {
 
   return (
     <div className="bg-gray-200 min-h-screen">
-      <MenteeHeader search={true} createLecture={true} />
+      <MenteeHeader search={true} onSearch={searchClasses} createLecture={true} />
       {allLectures !== null ? (
         <div className="courses mt-4 ">
           {/* the title first */}
@@ -28,20 +56,22 @@ export default function LecturesHomePage() {
             Our Lectures
           </div>
           <div className="flex flex-col gap-2">
-            {allLectures.map((lecture) => {
-              return (
-                <LectureCard
-                  image={lecture.thumbnail}
-                  title={lecture.title}
-                  description={lecture.description}
-                  price={lecture.price}
-                  date={lecture.date}
-                  duration={lecture.duration}
-                  time={lecture.startTime}
-                  id={allLectures.indexOf(lecture)}
-                />
-              );
-            })}
+              {allLectures.length === 0 ? <div className="text-center py-20 text-2xl">
+                  No classes found
+              </div>:allLectures.map((lecture) => {
+                  return (
+                      <LectureCard
+                          image={lecture.thumbnail}
+                          title={lecture.name}
+                          description={lecture.description}
+                          price={lecture.price}
+                          date={lecture.schedule.substring(0,10)}
+                          duration={"2 hours"}
+                          time={lecture.schedule.substring(11,19)}
+                          id={allLectures.indexOf(lecture)}
+                      />
+                  );
+              })}
           </div>
         </div>
       ) : (
