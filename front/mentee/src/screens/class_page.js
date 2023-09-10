@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Peer from "peerjs";
 import { localIp } from "../constants";
 
@@ -18,6 +18,7 @@ import {
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {checkLogin} from "../services/userService";
 
 export default function ClassPage() {
   const [chatPos, setChatPos] = useState("-right-full");
@@ -39,6 +40,7 @@ export default function ClassPage() {
   const [isStreamAvailable, setIsStreamAvailable] = useState(false);
   const [isVideoStream,setIsVideoStream] = useState(false);
   const [lectureDetails,setLectureDetails] = useState({});
+  const history = useNavigate();
 
   const toggleChat = () => {
     if (chatPos === "right-0") {
@@ -280,6 +282,13 @@ export default function ClassPage() {
   }
 
   useEffect(() => {
+    const isLoggedIn = checkLogin();
+
+    if(!isLoggedIn){
+      console.log("not logged in");
+      history("/login");
+      return
+    }
     // initialize pusher with your app key and cluster
     const pusher = new Pusher("20d590a2a5e4500caac1", {
       cluster: "ap2",

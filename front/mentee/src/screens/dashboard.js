@@ -5,10 +5,11 @@ import Profile from "../components/profile";
 import MenteeHeader from "../components/mentee_header";
 import { localIp } from "../constants";
 import {getAllClasses, searchClasses as searchClassesService} from "../services/classesService";
-import {getMe} from "../services/userService";
+import {checkLogin, getMe} from "../services/userService";
+import {useNavigate} from "react-router-dom";
 
 export default function Dashboard() {
-  const [allLectures, setAllLectures] = useState(null);
+  const [allLectures, setAllLectures] = useState([]);
   const [upcomingLectures, setUpcomingLectures] = useState([]);
   const [completedLectures, setCompletedLectures] = useState([]);
   const [profileInfo, setProfileInfo] = useState({});
@@ -16,10 +17,12 @@ export default function Dashboard() {
   const [created, setCreated] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
+  const history = useNavigate();
 
   const [totalLectures, setTotalLectures] = useState(0);
   const [pageNumbers, setPageNumbers] = useState([]);
   const lecturesPerPage = 1;
+
 
     const searchClasses = async (term)=> {
         try {
@@ -44,21 +47,31 @@ export default function Dashboard() {
     };
 
   useEffect(() => {
-    // we should fetch for both subscribed and created lectures and set their corresponding states
-  getAllClasses().then((classes)=>{
-      setUpcomingLectures(classes);
-      setAllLectures(classes);
-      setTotalLectures(classes.length);
-  }).catch((e)=>{
-      console.log(e);
-  })
+      const isLoggedIn = checkLogin();
 
-  getMe().then(userInfo=>{
-      setProfileInfo(userInfo);
-  }).catch((e)=>{
-      console.log(e);
-  })
+      if(!isLoggedIn){
+          console.log("not logged in");
+          history("/login");
+          return
+      }
+
+      // we should fetch for both subscribed and created lectures and set their corresponding states
+      getAllClasses().then((classes)=>{
+          setUpcomingLectures(classes);
+          setAllLectures(classes);
+          setTotalLectures(classes.length);
+      }).catch((e)=>{
+          console.log(e);
+      })
+
+      getMe().then(userInfo=>{
+          setProfileInfo(userInfo);
+      }).catch((e)=>{
+          console.log(e);
+      })
+
   }, []);
+
 
   function toUpcoming() {
     setCreated(false);
@@ -70,6 +83,7 @@ export default function Dashboard() {
     setSubscribed(false);
     setAllLectures(completedLectures);
   }
+
 
   return (
     <div className="bg-gray-200 min-h-screen">

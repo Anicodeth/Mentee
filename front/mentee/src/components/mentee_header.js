@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Profile from "./profile";
@@ -11,6 +11,8 @@ import {getMe} from "../services/userService";
 export default function MenteeHeader(props) {
     const [profileInfo,setProfileInfo] = useState({});
     const searchRef = useRef(null);
+    const isLogged = !!window.localStorage.getItem("token");
+
 
     useEffect(() => {
         if(searchRef.current !== null){
@@ -24,7 +26,6 @@ export default function MenteeHeader(props) {
            console.log(e);
        })
 }, []);
-    const isLogged = !!window.localStorage.getItem("token");
   return (
     <div className="header flex h-24 items-center px-4 gap-8 shadow-lg lg:px-40 md:px-20 lg:gap-16 relative">
       <div className="logo text-3xl font-semibold text-gray-700">Mentee</div>
