@@ -3,47 +3,32 @@ import { useState, useEffect } from "react";
 import MenteeHeader from "../components/mentee_header.js";
 import LectureCard from "../components/lecture_card";
 import { localIp } from "../constants";
+import {getAllClasses, searchClasses as searchClassesService} from "../services/classesService" ;
 
 export default function LecturesHomePage() {
   const [allLectures, setAllLectures] = useState(null);
-
-    const searchClasses = (term) => {
-
-        fetch(localIp+"/classes/search",{
-            method:"POST",
-            headers:{
-                "Content-Type": "application/json",
-                "Authorization": localStorage.getItem("token")
-            },
-            body:JSON.stringify({
-                "query":term
-            })
-        }).then((res) => {
-            console.log(res);
-            return res.json()})
-            .then((data) => {
-                console.log(data);
-                setAllLectures(data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });}
+  const [errorMessage, setErrorMessage] = useState("")
+  const searchClasses = async (term)=> {
+      try {
+          const classes = await searchClassesService(term);
+          setAllLectures(classes);
+      }
+      catch (e){
+          setErrorMessage(e.message.toString());
+      }
+  }
 
   useEffect(() => {
-    fetch(localIp + "/classes",{
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
-        }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setAllLectures(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      try {
+          getAllClasses().then(allClasses=>{
+              setAllLectures(allClasses);
+          });
+
+      }
+      catch (e){
+          setErrorMessage(e.message.toString());
+      }
+
   }, []);
 
   return (

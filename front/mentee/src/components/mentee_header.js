@@ -6,27 +6,23 @@ import {PrimaryButton} from "./buttons";
 import {useState, useEffect, useRef} from "react";
 import {localIp} from "../constants";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
+import {getMe} from "../services/userService";
 
 export default function MenteeHeader(props) {
     const [profileInfo,setProfileInfo] = useState({});
     const searchRef = useRef(null);
 
     useEffect(() => {
-        searchRef.current.value = "";
-        fetch(`${localIp}/users/me`,{
-            method:"GET",
-            headers:{
-            "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+        if(searchRef.current !== null){
+            searchRef.current.value = "";
         }
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            setProfileInfo(data);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+
+        // getting user info
+       getMe().then(userInfo => {
+           setProfileInfo(userInfo);
+       }).catch((e)=>{
+           console.log(e);
+       })
 }, []);
     const isLogged = !!window.localStorage.getItem("token");
   return (
