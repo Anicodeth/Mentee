@@ -25,16 +25,16 @@ export async function register(user) {
         else{
             console.log("Error in register",response.statusText);
             if(response.status === 401){
-                return "Invalid credentials";
+                return "Email already in use";
             }
             else if(response.status >= 500){
-                return "Server error, please try again."
+                return "Server error, please try again"
             }
         }
     }
     catch(ex){
         console.log("Error in register");
-        return "Unknown error occurred. Please check your connection. "
+        return "Email already in use"
     }
 }
 
@@ -49,17 +49,17 @@ export async function login({email, password}) {
             return "success";}
         else{
                 if(response.status === 401){
-                    return "Email already in use.";
+                    return "Invalid credentials. Try again.";
                 }
                 else if(response.status >= 500){
-                    return "Server error, please try again."
+                    return "Server error, please try again"
                 }
             }
 
     }
     catch(ex){
         console.log("Error in login");
-        return "Unknown error occurred. Please check your connection. "
+        return "Invalid credentials. Try again.";
     }
 }
 

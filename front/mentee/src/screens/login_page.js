@@ -80,7 +80,7 @@ ref:  passwordRef  },
         ref:confirm_passwordRef
     },
       {
-          label: "Create Password",
+          label: "Password",
           type: "password",
           placeholder: "Enter your password",
           id: "login-password",
@@ -90,7 +90,7 @@ ref:  passwordRef  },
 
   ];
 
-  const getFormState = () => {
+  const getErrorState = () => {
     if (formState === "inProgress") {
       return <ThreeCircles
           height = "40"
@@ -102,7 +102,7 @@ ref:  passwordRef  },
           wrapperClass
       />
     } else if (formState === "error") {
-      return <p className="text-red-600">{errorMessage}</p>
+      return <p className="text-white text-xl font-medium px-4 py-2">{errorMessage}</p>
     } else {
       return null;
     }
@@ -118,7 +118,7 @@ ref:  passwordRef  },
             passwordRef.current.value !== confirm_passwordRef.current.value
         ) {
             setFormState("error");
-            setErrorMessage("Please fill in all required fields and make sure passwords match.");
+            setErrorMessage("Please fill in all required fields and make sure passwords match");
             return false;
         }
         return true;
@@ -128,7 +128,7 @@ ref:  passwordRef  },
     const validateLogin = () => {
         if (!loginEmailRef.current.value || !loginPasswordRef.current.value) {
             setFormState("error");
-            setErrorMessage("Please fill in both email and password fields.");
+            setErrorMessage("Please fill in both email and password fields");
             return false;
         }
         return true;
@@ -147,7 +147,7 @@ ref:  passwordRef  },
 
     const confirmPassword = confirm_passwordRef.current.value;
     const data = {
-        name: firstName,
+        name: firstName+" "+lastName,
         email: email,
         password: password,
         role: role,
@@ -199,7 +199,6 @@ const LogIn = () => {
         });
 }
 
-
   const toSignUp = () => {
       setErrorMessage("");
       setIsLogin(!isLogin);
@@ -228,7 +227,7 @@ const LogIn = () => {
             if (field.showWhenSignUp) {
               return (
                 <div key={index} className="w-full my-3">
-                  <label className="mb-2 block relative top-1 bg-gray-200 w-fit text-gray-700 px-2 ">
+                  <label className="mb-1 block relative top-1 bg-gray-200 w-fit text-gray-700 px-2 ">
                     {field.label}
                   </label>
                   <input
@@ -244,7 +243,7 @@ const LogIn = () => {
             }
             return null;
           })}
-            <div onChange={onChangeValue} className={`w-full mb-8 ${isLogin?"hidden":"block"}`}>
+            <div onChange={onChangeValue} className={`w-full mb-4 ${isLogin?"hidden":"block"}`}>
                 <div className="mb-2 block relative top-1 bg-gray-200 w-fit text-gray-700 px-2 ">
                     Role
                 </div>
@@ -291,8 +290,8 @@ const LogIn = () => {
               </Link>
             </p>
           </div>
-          <div className="mt-4 py-3 -mb-10 w-96">
-            {getFormState()}
+          <div className={`${errorMessage===""?"hidden":""} mt-4 py-2 -mb-10 flex justify-center ${formState!=="inProgress"?"fixed bottom-12 left-5 bg-red-500":""} `}>
+            {getErrorState()}
             {/*<p className="text-green-600">Success message</p>*/}
           </div>
         </div>
