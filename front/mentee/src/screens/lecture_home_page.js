@@ -8,6 +8,7 @@ import {getAllClasses, searchClasses as searchClassesService} from "../services/
 export default function LecturesHomePage() {
   const [allLectures, setAllLectures] = useState(null);
   const [errorMessage, setErrorMessage] = useState("")
+
   const searchClasses = async (term)=> {
       try {
           const classes = await searchClassesService(term);
