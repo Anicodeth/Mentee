@@ -49,3 +49,22 @@ export async function getClass(classId){
             console.log(err);
         });
 }
+
+export async function createClass(classDetail){
+    return fetch(localIp + "/classes/createClass", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+        body: JSON.stringify(classDetail),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            return data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}

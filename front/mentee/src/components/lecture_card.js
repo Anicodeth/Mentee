@@ -15,7 +15,7 @@ export default function LectureCard(props) {
   lectureId = lectureId.toString();
   return (
     <Link to={"/lecture/" + lectureId}>
-      <div className="lecture-card bg-gray-100 flex w-10/12 gap-4 m-auto relative px-5 py-12 lg:w-8/12 rounded shadow cursor-pointer">
+      <div className="lecture-card bg-white flex w-10/12 gap-4 mx-auto my-1 relative px-5 py-12 lg:w-8/12 rounded shadow-md shadow-gray-400 cursor-pointer">
         <div className="lecture-image">
           <img src={props.image} alt="lecture" className="w-60" />
         </div>
