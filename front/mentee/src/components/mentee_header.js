@@ -13,7 +13,6 @@ export default function MenteeHeader(props) {
     const searchRef = useRef(null);
     const isLogged = !!window.localStorage.getItem("token");
 
-
     useEffect(() => {
         if(searchRef.current !== null){
             searchRef.current.value = "";
@@ -26,9 +25,14 @@ export default function MenteeHeader(props) {
            console.log(e);
        })
 }, []);
+
   return (
     <div className="header flex h-24 items-center px-4 gap-8 shadow-lg lg:px-40 md:px-20 lg:gap-16 relative">
-      <div className="logo text-3xl font-semibold text-gray-700">Mentee</div>
+      <div className="logo text-3xl font-semibold text-gray-700 cursor-pointer" onClick={
+            ()=>{
+                window.location.href = "/lectures";
+            }
+      }>Mentee</div>
       {props.search && (
         <div className="search-bar flex gap-4">
           <input
@@ -47,7 +51,7 @@ export default function MenteeHeader(props) {
             }} className="text-green-600"><FontAwesomeIcon icon={faSearch} size="xl"/></button>
         </div>
       )}
-      {props.createLecture && (
+      {profileInfo.role === "instructor" && (props.createLecture === null || props.createLecture !== false) && (
         <div className="create-lecture-btn bg-green-600 text-white px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-green-700 cursor-pointer transition delay-50 font-semibold">
           <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
           <Link to={"/create"}>
