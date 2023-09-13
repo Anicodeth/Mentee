@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function ErrorMessage({ message, duration = 3000 }) {
+export default function SideMessage({ message,isError = true, duration = 3000 }) {
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ export default function ErrorMessage({ message, duration = 3000 }) {
         };
     }, [duration]);
     return (
-        <div className={`bg-red-500 text-white p-2 text-center ${isVisible ? "" : "hidden"}`}>
+        <div className={`fixed bottom-5 left-5 ${isError?"bg-red-600":"bg-green-500"} text-white font-bold text-xl px-5 py-3 text-center ${isVisible ? "" : "hidden"}`}>
             {message}
         </div>
     );
