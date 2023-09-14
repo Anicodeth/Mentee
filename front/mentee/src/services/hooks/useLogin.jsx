@@ -57,7 +57,5 @@ export default function useSignup() {
             }, 3000);
         }
     }
-
-
     return {isLoading, errorMessage, isSuccess, isError, LogIn};
 }

@@ -8,7 +8,7 @@ import {getClass} from "../services/classesService";
 import {checkLogin} from "../services/userService";
 
 export default function LectureDetailPage() {
-  const lectureId = useParams().id;
+  const lectureId = localStorage.getItem("current_lecture");
   const [lectureDetail, setLectureDetail] = useState(null);
   const history = useNavigate();
 
@@ -20,6 +20,7 @@ export default function LectureDetailPage() {
           history("/login");
           return
       }
+      console.log(lectureId);
       getClass(lectureId).then(classDetail => {
           setLectureDetail(classDetail);
       }).catch(e=>{

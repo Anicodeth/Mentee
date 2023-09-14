@@ -4,7 +4,7 @@ import Footer from "../components/footer";
 import Profile from "../components/profile";
 import MenteeHeader from "../components/mentee_header";
 import { localIp } from "../constants";
-import {getAllClasses, searchClasses as searchClassesService} from "../services/classesService";
+import {getAllClasses, getMyClasses, searchClasses as searchClassesService} from "../services/classesService";
 import {checkLogin, getMe} from "../services/userService";
 import {useNavigate} from "react-router-dom";
 import {ClassLister} from "../components/class_lister";
@@ -58,18 +58,31 @@ export default function Dashboard() {
 
       setIsLoading(true);
       // we should fetch for both subscribed and created lectures and set their corresponding states
-      getAllClasses().then((classes)=>{
-          setIsLoading(false);
-          setUpcomingLectures(classes);
-          setAllLectures(classes);
-          setTotalLectures(classes.length);
-      }).catch((e)=>{
-          setIsLoading(false);
-          console.log(e);
-      })
 
       getMe().then(userInfo=>{
           setProfileInfo(userInfo);
+          if(userInfo["role"] === "student"){
+              getAllClasses().then((classes)=>{
+                  setIsLoading(false);
+                  setUpcomingLectures(classes);
+                  setAllLectures(classes);
+                  setTotalLectures(classes.length);
+              }).catch((e)=>{
+                  setIsLoading(false);
+                  console.log(e);
+              })
+          }
+          else{
+              getMyClasses().then((classes)=>{
+                  setIsLoading(false);
+                  setUpcomingLectures(classes);
+                  setAllLectures(classes);
+                  setTotalLectures(classes.length);
+              }).catch((e)=>{
+                  setIsLoading(false);
+                  console.log(e);
+              })
+          }
       }).catch((e)=>{
           console.log(e);
       })

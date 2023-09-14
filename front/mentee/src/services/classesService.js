@@ -68,3 +68,56 @@ export async function createClass(classDetail){
             console.log(err);
         });
 }
+
+export async function deleteClass(classId){
+    return fetch(localIp + `/classes/${classId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            return data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+export async function updateClass(classDetail){
+    return fetch(localIp + `/classes/${classDetail.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+        body: JSON.stringify(classDetail),
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+            return data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}
+
+// Instructor gets classes created by them
+export function getMyClasses(){
+    return fetch(localIp + "/my-classes",{
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        }
+    })
+        .then((res) => res.json())
+        .then((data) => data)
+        .catch((err) => {
+            console.log(err);
+        });
+}

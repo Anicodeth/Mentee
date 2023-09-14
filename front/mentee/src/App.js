@@ -28,7 +28,7 @@ function App() {
         <Route path="lectures" element={<LecturesHomePage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="lecture/:id" element={<LectureDetailPage />} />
+        <Route path="lecture" element={<LectureDetailPage />} />
         <Route path="create" element={<CreateLecture />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>

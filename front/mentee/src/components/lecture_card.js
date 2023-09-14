@@ -11,10 +11,9 @@ import {
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
 export default function LectureCard(props) {
-  let lectureId = parseInt(props.id) + 1;
-  lectureId = lectureId.toString();
+  localStorage.setItem("current_lecture",props.id);
   return (
-    <Link to={"/lecture/" + lectureId}>
+    <Link to={"/lecture"}>
       <div className="lecture-card bg-white flex w-10/12 gap-4 mx-auto my-1 relative px-5 py-12 lg:w-8/12 rounded shadow-md shadow-gray-400 cursor-pointer">
         <div className="lecture-image">
           <img src={props.image} alt="lecture" className="w-60" />
