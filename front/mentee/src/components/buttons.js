@@ -20,7 +20,7 @@ export function PrimaryButton(props) {
 export function SecondaryButton(props){
   return <button
       onClick={props.onPress}
-      className={`w-28 ${props.isLoading?"bg-blue-500":"bg-blue-600"} text-white px-4 py-2 rounded font-medium focus:outline-none`}
+      className={`w-36 ${props.isLoading?"bg-blue-500":"bg-blue-600"} text-white px-4 py-2 rounded font-medium focus:outline-none`}
   >
     {props.isLoading ? <FontAwesomeIcon icon={ faSpinner}/> : props.text}
   </button>;

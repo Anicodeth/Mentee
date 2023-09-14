@@ -19,3 +19,19 @@ export async function getMe() {
 export function checkLogin() {
     return !!window.localStorage.getItem("token");
 }
+
+export async function updateUser(userDetail){
+    return await fetch(`${localIp}/users/`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+        body: userDetail
+    })
+        .then((res) => res.json())
+        .then((data) => data)
+        .catch((err) => {
+            console.log(err);
+        });
+}
