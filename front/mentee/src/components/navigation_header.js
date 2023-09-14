@@ -63,7 +63,7 @@ export default function NavigationHeader() {
           </ul>
         </div>
         <div className="nav-buttons flex gap-4">
-          <Link to="/login">
+          <Link to="/signup">
             {" "}
             <PrimaryButton text={"Sign up"} />
           </Link>
@@ -75,8 +75,6 @@ export default function NavigationHeader() {
         </div>
       </div>
 
-      {/* main menu */}
-
       <div className="flex gap-4 lg:gap-10 items-center">
         <div className="logo text-3xl font-bold">Mentee</div>
         <div className="nav-links hidden lg:block">
@@ -84,7 +82,7 @@ export default function NavigationHeader() {
             {localLinks.map((link) => {
               return (
                 <li>
-                  <Link className="hover:bg-gray-700 hover:text-gray-100 transition ease-in-out delay-50 px-4 py-2">
+                  <Link to="" className="hover:bg-gray-700 hover:text-gray-100 transition ease-in-out delay-50 px-4 py-2">
                     {link}
                   </Link>
                 </li>
@@ -95,7 +93,7 @@ export default function NavigationHeader() {
       </div>
 
       <div className="nav-buttons hidden lg:flex gap-2">
-        <Link to="/login">
+        <Link to="/signup">
           {" "}
           <PrimaryButton text={"Sign up"} />
         </Link>

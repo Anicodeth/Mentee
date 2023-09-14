@@ -6,7 +6,8 @@ import {getMe} from "../services/userService";
 import {createClass} from "../services/classesService";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import SideMessage from "./error_message";
+import SideMessage from "./side_message";
+import {SecondaryButton} from "./buttons";
 
 export default function CreateLecture(props) {
   const titleRef = useRef(null);
@@ -39,7 +40,7 @@ export default function CreateLecture(props) {
     if(!validateCreateLecture()){
       setTimeout(()=>{
         setIsError(false);
-      },3000);
+      },6000);
         return;
     }
     setIsLoading(true);
@@ -153,12 +154,7 @@ export default function CreateLecture(props) {
           })}
 
           <div className="flex justify-end gap-4">
-            <button
-              onClick={createLecture}
-              className="w-20 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {isLoading ? <FontAwesomeIcon icon={ faSpinner}/> : "Create"}
-            </button>
+            <SecondaryButton isLoading={isLoading} text={"Create"} onPress={createLecture}/>
             {isError ? (
                <SideMessage message={errorMessage}/>
             ) : null}
