@@ -6,11 +6,13 @@ import { localIp } from "../constants";
 import {getAllClasses, searchClasses as searchClassesService} from "../services/classesService" ;
 import {checkLogin} from "../services/userService";
 import {useNavigate} from "react-router-dom";
+import {ClassLister} from "../components/class_lister";
 
 export default function LecturesHomePage() {
   const [allLectures, setAllLectures] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-    const history = useNavigate();
+  const [isLoading,setIsLoading] = useState(false);
+  const history = useNavigate();
 
   const searchClasses = async (term)=> {
       try {
@@ -31,12 +33,15 @@ export default function LecturesHomePage() {
           return
       }
       try {
+          setIsLoading(true);
           getAllClasses().then(allClasses=>{
+              setIsLoading(false);
               setAllLectures(allClasses);
           });
 
       }
       catch (e){
+          setIsLoading(false);
           setErrorMessage(e.message.toString());
       }
 
@@ -45,38 +50,13 @@ export default function LecturesHomePage() {
   return (
     <div className="bg-gray-200 min-h-screen">
       <MenteeHeader search={true} onSearch={searchClasses} createLecture={true} />
-      {allLectures !== null ? (
         <div className="courses mt-4 ">
           {/* the title first */}
           <div className="title text-4xl font-semibold text-gray-700 px-12 py-10 lg:px-40 md:px-20 text-center">
             Our Lectures
           </div>
-          <div className="flex flex-col gap-2">
-              {allLectures.length === 0 ? <div className="text-center py-20 text-2xl">
-                  No classes found
-              </div>:allLectures.map((lecture) => {
-                  return (
-                      <LectureCard
-                          image={lecture.thumbnail}
-                          title={lecture.name}
-                          description={lecture.description}
-                          price={lecture.price}
-                          date={lecture.schedule.substring(0,10)}
-                          duration={"2 hours"}
-                          time={lecture.schedule.substring(11,19)}
-                          id={allLectures.indexOf(lecture)}
-                      />
-                  );
-              })}
-          </div>
+          <ClassLister lectures={allLectures} isLoading={isLoading} />
         </div>
-      ) : (
-        <div className="lecture-detail mx-auto mt-40 flex justify-center">
-          <div className="text-2xl font-semibold m-auto justify-center items-center ">
-            Loading...
-          </div>
-        </div>
-      )}
       <div className="footer w-full  ">
         <Footer />
       </div>

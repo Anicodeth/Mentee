@@ -1,7 +1,7 @@
 import React, {useEffect, useRef} from "react";
 import { useState } from "react";
 import {Link, useNavigate} from "react-router-dom";
-import { PrimaryButton } from "../components/buttons";
+import {PrimaryButton, SecondaryButton} from "../components/buttons";
 import { ThreeCircles } from  'react-loader-spinner'
 
 
@@ -70,7 +70,7 @@ export default function LoginPage() {
 
                     })}
                     <div className="w-full mb-2 flex flex-col items-center gap-2 mt-4">
-                        <PrimaryButton text={"Log in"} onPress={handleLogin} />
+                        <SecondaryButton isLoading={isLoading} text={"Log in"} onPress={handleLogin} />
                     </div>
 
                     <div className="mb-1">
@@ -88,15 +88,15 @@ export default function LoginPage() {
                         </p>
                     </div>
                     <div className={`${errorMessage===""?"hidden":""} mt-4 py-2 -mb-10 flex justify-center ${!isLoading?"fixed bottom-12 left-5 bg-red-500":""} `}>
-                        {isLoading && <ThreeCircles
-                            height = "40"
-                            width = "40"
-                            radius = "9"
-                            color = 'grey'
-                            ariaLabel = 'three-dots-loading'
-                            wrapperStyle
-                            wrapperClass
-                        />}
+                        {/*{isLoading && <ThreeCircles*/}
+                        {/*    height = "40"*/}
+                        {/*    width = "40"*/}
+                        {/*    radius = "9"*/}
+                        {/*    color = 'grey'*/}
+                        {/*    ariaLabel = 'three-dots-loading'*/}
+                        {/*    wrapperStyle*/}
+                        {/*    wrapperClass*/}
+                        {/*/>}*/}
                         {isError && <p className="text-white text-xl font-medium px-4 py-2">{errorMessage}</p>}
                     </div>
                 </div>

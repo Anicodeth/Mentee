@@ -7,22 +7,23 @@ import { localIp } from "../constants";
 import {getAllClasses, searchClasses as searchClassesService} from "../services/classesService";
 import {checkLogin, getMe} from "../services/userService";
 import {useNavigate} from "react-router-dom";
+import {ClassLister} from "../components/class_lister";
 
 export default function Dashboard() {
-  const [allLectures, setAllLectures] = useState([]);
-  const [upcomingLectures, setUpcomingLectures] = useState([]);
-  const [completedLectures, setCompletedLectures] = useState([]);
+  const [allLectures, setAllLectures] = useState(null);
+  const [upcomingLectures, setUpcomingLectures] = useState(null);
+  const [completedLectures, setCompletedLectures] = useState(null);
   const [profileInfo, setProfileInfo] = useState({});
   const [subscribed, setSubscribed] = useState(true);
   const [created, setCreated] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading,setIsLoading] = useState(true);
   const history = useNavigate();
 
   const [totalLectures, setTotalLectures] = useState(0);
   const [pageNumbers, setPageNumbers] = useState([]);
   const lecturesPerPage = 1;
-
 
     const searchClasses = async (term)=> {
         try {
@@ -55,12 +56,15 @@ export default function Dashboard() {
           return
       }
 
+      setIsLoading(true);
       // we should fetch for both subscribed and created lectures and set their corresponding states
       getAllClasses().then((classes)=>{
+          setIsLoading(false);
           setUpcomingLectures(classes);
           setAllLectures(classes);
           setTotalLectures(classes.length);
       }).catch((e)=>{
+          setIsLoading(false);
           console.log(e);
       })
 
@@ -108,34 +112,7 @@ export default function Dashboard() {
               Completed
             </div>
           </div>
-          {allLectures && allLectures.length === 0 && (
-            <div className="lecture-detail mx-auto mt-40 flex justify-center">
-              <div className="text-2xl font-semibold m-auto justify-center items-center ">
-                No lectures to show
-              </div>
-            </div>
-          )}
-          {allLectures ? (
-            allLectures.map((lecture) => {
-              return (
-                <LectureCard
-                  image={lecture.thumbnail}
-                  title={lecture.name}
-                  description={lecture.description}
-                  price={lecture.price + " (Paid)"}
-                  date={lecture.schedule.substring(0, 10)}
-                  duration={"2 hours"}
-                  time={lecture.schedule.substring(11,19)}
-                />
-              );
-            })
-          ) : (
-            <div className="lecture-detail mx-auto mt-40 flex justify-center">
-              <div className="text-2xl font-semibold m-auto justify-center items-center ">
-                Loading...
-              </div>
-            </div>
-          )}
+          <ClassLister lectures={allLectures} isLoading={isLoading}/>
         </div>
       </div>
       <nav className="flex items-center justify-center mt-12">
