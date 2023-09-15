@@ -82,6 +82,7 @@ export default function ProfilePage(props) {
       const userDetail = {
         "name": firstNameRef.current.value+" " + lastNameRef.current.value,
         "email": emailRef.current.value,
+        "id": userInfo._id,
       }
       const response = await updateUser(userDetail)
       console.log(response);
@@ -107,12 +108,12 @@ export default function ProfilePage(props) {
   }
 
   return (
-    <div className="bg-gray-200 h-screen ">
+    <div className="bg-gray-200 h-screen">
       <MenteeHeader search={false} />
       {isLoading ? <div className="w-screen h-full flex justify-center items-center">
           <FontAwesomeIcon className="h-14" icon={faSpinner}/>
       </div>
-        :<div className="max-w-4xl lg:mx-auto mt-20 bg-white rounded-lg shadow-md mx-10 ">
+        :<div className="max-w-xl lg:mx-auto mt-20 bg-white rounded-lg shadow-md mx-10 ">
         <div className="py-4 px-6">
           <h2 className="text-2xl font-semibold mb-4">Profile Information</h2>
           <div className="flex items-center mb-6">
@@ -125,6 +126,7 @@ export default function ProfilePage(props) {
               <h3 className="text-xl font-semibold">{profileInfo.name}</h3>
               <p className="text-gray-600">{profileInfo.email}</p>
             </div>
+            <button className="ml-10 bg-red-600 text-lg text-white px-3 py-1 font-semibold rounded">Delete Account</button>
           </div>
           {
             fields.map((field) => {
