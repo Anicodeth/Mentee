@@ -12,6 +12,7 @@ export default function MenteeHeader(props) {
     const [profileInfo,setProfileInfo] = useState({});
     const searchRef = useRef(null);
     const isLogged = !!window.localStorage.getItem("token");
+    const history = useNavigate();
 
     useEffect(() => {
         if(searchRef.current !== null){
@@ -25,6 +26,12 @@ export default function MenteeHeader(props) {
            console.log(e);
        })
 }, []);
+
+    const toProfile = ()=>{
+        if(window.location.pathname !== "/profile") {
+            history("/profile");
+        }
+    }
 
   return (
     <div className="header flex h-24 items-center px-4 gap-8 shadow-lg lg:px-40 md:px-20 lg:gap-16 relative">
@@ -61,28 +68,28 @@ export default function MenteeHeader(props) {
       )}
         {
             isLogged ? (
-                <div className="profile flex gap-5 items-center absolute right-10 cursor-pointer ">
-                   <div className="profile-info flex gap-3 mr-4 border border-gray-300 px-4 py-2 bg-gray-200 rounded-3xl hover:border-gray-400 transition delay-50">
-                       <div className="profile-image">
-                           <img className="w-12 h-12 rounded-full" src={!profileInfo.image_src?"./images/person.png":profileInfo.image_src} alt="profile"/>
+                    <div onClick={toProfile} className="profile flex gap-5 items-center absolute right-10 cursor-pointer ">
+                       <div className="profile-info flex gap-3 mr-4 border border-gray-300 px-4 py-2 bg-gray-200 rounded-3xl hover:border-gray-400 transition delay-50">
+                           <div className="profile-image">
+                               <img className="w-12 h-12 rounded-full" src={!profileInfo.image_src?"./images/person.png":profileInfo.image_src} alt="profile"/>
+                           </div>
+                           <div className="profile-name text-gray-700 font-semibold text-lg">{profileInfo.name}
+                               <div className="profile-email text-gray-500 font-semibold text-sm">{profileInfo.email}</div>
+                           </div>
                        </div>
-                       <div className="profile-name text-gray-700 font-semibold text-lg">{profileInfo.name}
-                           <div className="profile-email text-gray-500 font-semibold text-sm">{profileInfo.email}</div>
-                       </div>
-                   </div>
 
-                    <PrimaryButton text={"Log Out"} />
-                    {/*<div className="bg-red-500 px-4 py-2 rounded text-gray-100 font-medium cursor-pointer hover:bg-red-400">Log Out</div>*/}
-                </div>
+                        <PrimaryButton text={"Log Out"} />
+                        {/*<div className="bg-red-500 px-4 py-2 rounded text-gray-100 font-medium cursor-pointer hover:bg-red-400">Log Out</div>*/}
+                    </div>
             ):
             (
-                <div className="profile flex gap-4 items-center absolute right-10">
-                    <div className="profile-image">
-                        <img className="w-12 h-12 rounded-full" src="./images/person.png" alt="profile"/>
-                    </div>
-                    <div className="profile-name text-gray-700 font-semibold text-lg">Guest</div>
-                    <PrimaryButton text={"Log in"} />/<PrimaryButton text={"Sign up"} />
-                </div>
+                  <div className="profile flex gap-4 items-center absolute right-10">
+                      <div className="profile-image">
+                          <img className="w-12 h-12 rounded-full" src="./images/person.png" alt="profile"/>
+                      </div>
+                      <div className="profile-name text-gray-700 font-semibold text-lg">Guest</div>
+                      <PrimaryButton text={"Log in"} />/<PrimaryButton text={"Sign up"} />
+                  </div>
             )
         }
     </div>
