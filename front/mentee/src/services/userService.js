@@ -50,3 +50,18 @@ export async function deleteUser(userId){
             console.log(err);
         });
 }
+
+export async function getUser(userId){
+    return await fetch(`${localIp}/users/id/${userId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+    })
+        .then((res) => res.json())
+        .then((data) => data)
+        .catch((err) => {
+            console.log(err);
+        });
+}
