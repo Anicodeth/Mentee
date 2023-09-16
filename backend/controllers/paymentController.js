@@ -3,6 +3,7 @@ const Payment= require('../models/Payment');
 const PendingPayment = require('../models/PendingPayment');
 const classService = require("../services/classService");
 const axios = require('axios');
+const { enrollUserInClass } = require('../services/enrollmentService');
 
 CHAPA_AUTH = "CHASECK_TEST-c2wIJNJVQxlKy0Xigv9duKvqXmMQj7YD";
 const config = {
@@ -78,6 +79,7 @@ const handlePaymentCallback = async (req, res) => {
       if (payment) {
         // Update the payment status to 'completed'
         await payment.update({ status: 'completed' });
+        await enrollUserInClass(userId, classId);
         console.log("Payment record updated to 'completed'");
         res.status(200).json({ message: 'Payment was successfully verified' });
       } else {
@@ -150,6 +152,7 @@ const handlePaymentWithdraw = async (req, res) => {
           status: 'completed',
         },
       });
+
 
       res.status(200).json({ message: 'Withdrawal request successful' });
     } else {

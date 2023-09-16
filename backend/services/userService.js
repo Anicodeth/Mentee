@@ -25,7 +25,7 @@ const getUserById = async (userId) => {
 
         // const foundUser = await User.findById(userId);
         const foundUser = await User.findOne({ userId });
-        console.log(foundUser);
+        
         return foundUser;
 
   } catch (error) {
