@@ -8,6 +8,7 @@ import {getAllClasses, getClass} from "../services/classesService";
 import {checkLogin, getMe, getUser} from "../services/userService";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {makePayment} from "../services/payment_service";
 
 export default function LectureDetailPage() {
   const lectureId = localStorage.getItem("current_lecture");
@@ -16,11 +17,12 @@ export default function LectureDetailPage() {
   const [instructorInfo, setInstructorInfo] = useState(null);
   const history = useNavigate();
 
-  const makePayment = async () => {
-      const userInfo = await getMe();
-      const paymentDetail = {classId: lectureId,amount:lectureDetail.price,email:userInfo.email,first_name:userInfo.name.split(" ")[0],last_name:userInfo.name.split(" ")[1],phone_number:"",returnUrl:`${localIp}/mentee/lecture/${lectureId}`};
-      const response = await makePayment(paymentDetail);
-      console.log(response);
+  const _makePayment = async () => {
+          const userInfo = await getMe();
+          console.log(userInfo);
+          const paymentDetail = {classId: lectureId,amount:lectureDetail.price,email:userInfo.email,first_name:userInfo.name.split(" ")[0],last_name:userInfo.name.split(" ")[1],phone_number:"",returnUrl:`${localIp}/mentee/lecture/${lectureId}`};
+          const response = await makePayment(paymentDetail);
+          console.log(response);
   }
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function LectureDetailPage() {
           // startTime={lectureDetail.startTime}
           // endTime={lectureDetail.endTime}
           price={lectureDetail.price}
-          onEnroll={makePayment}
+          onEnroll={_makePayment}
         />
       ) : (
         <div className="lecture-detail mx-auto mt-40 flex justify-center">
