@@ -9,7 +9,6 @@ export default function EnrollmentPage(){
             <MenteeHeader search={false} />
             <div className="w-full flex justify-center items-center">
                 <div className="w-1/2 h-96 my-20  bg-white rounded-lg shadow-lg">
-                    df
                 </div>
             </div>
             <div className="">
@@ -18,3 +17,4 @@ export default function EnrollmentPage(){
         </div>
     </div>
 }
+// {classId, amount, email, first_name, last_name, phone_number, returnUrl}

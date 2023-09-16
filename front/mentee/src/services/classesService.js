@@ -109,7 +109,7 @@ export async function updateClass(classDetail){
 
 // Instructor gets classes created by them
 export function getMyClasses(){
-    return fetch(localIp + "/my-classes",{
+    return fetch(localIp + "/classes/my-classes",{
         method: "GET",
         headers: {
             "Content-Type": "application/json",
