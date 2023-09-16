@@ -206,6 +206,9 @@ router.get('/', authMiddleware, userController.getAllUsers);
 // Get a user by their ID (requires authentication)
 router.get('/me', authMiddleware, userController.getUserById);
 
+// Get a user by their id
+router.get('/id/:id',authMiddleware, userController.getUserGivenId);
+
 // Update a user by their ID (requires authentication)
 router.put('/update', authMiddleware, userController.updateUserById);
 
