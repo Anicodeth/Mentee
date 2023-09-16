@@ -70,7 +70,7 @@ export default function LectureDetail(props) {
           <div className="price text-gray-700 font-semibold">{props.price}</div>
         </div>
         <div className="lecture-button flex justify-center mt-">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl">
+          <button onClick={props.onEnroll} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl">
             Enroll
           </button>
           <Link to={"/status/" + lectureId}>

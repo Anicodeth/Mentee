@@ -5,7 +5,7 @@ import Footer from "../components/footer";
 import MenteeHeader from "../components/mentee_header";
 import { localIp } from "../constants";
 import {getAllClasses, getClass} from "../services/classesService";
-import {checkLogin, getUser} from "../services/userService";
+import {checkLogin, getMe, getUser} from "../services/userService";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 
@@ -15,6 +15,13 @@ export default function LectureDetailPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [instructorInfo, setInstructorInfo] = useState(null);
   const history = useNavigate();
+
+  const makePayment = async () => {
+      const userInfo = await getMe();
+      const paymentDetail = {classId: lectureId,amount:lectureDetail.price,email:userInfo.email,first_name:userInfo.name.split(" ")[0],last_name:userInfo.name.split(" ")[1],phone_number:"",returnUrl:`${localIp}/mentee/lecture/${lectureId}`};
+      const response = await makePayment(paymentDetail);
+      console.log(response);
+  }
 
   useEffect(() => {
       const isLoggedIn = checkLogin();
@@ -53,6 +60,7 @@ export default function LectureDetailPage() {
           // startTime={lectureDetail.startTime}
           // endTime={lectureDetail.endTime}
           price={lectureDetail.price}
+          onEnroll={makePayment}
         />
       ) : (
         <div className="lecture-detail mx-auto mt-40 flex justify-center">
@@ -67,3 +75,4 @@ export default function LectureDetailPage() {
     </div>
   );
 }
+// {classId, amount, email, first_name, last_name, phone_number, returnUrl}
