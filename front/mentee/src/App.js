@@ -14,6 +14,7 @@ import Dashboard from "./screens/dashboard";
 import ProfilePage from "./screens/profile_page";
 import CreateLecture from "./components/create_lecture";
 import LoginPage from "./screens/login_page";
+import EnrollmentPage from "./screens/enrollment_page";
 
 function App() {
   return (
@@ -22,7 +23,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="signup" element={<SignupPage />} />
         <Route path="login" element={<LoginPage />} />
-
         <Route path="class/:id/:isteacher" element={<ClassPage />} />
         <Route path="status/:id" element={<ClassStatusPage />} />
         <Route path="lectures" element={<LecturesHomePage />} />
@@ -30,6 +30,7 @@ function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="lecture" element={<LectureDetailPage />} />
         <Route path="create" element={<CreateLecture />} />
+        <Route path="enrollment" element={<EnrollmentPage />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>
     </BrowserRouter>

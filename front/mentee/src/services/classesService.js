@@ -41,6 +41,7 @@ export async function getClass(classId){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token"),
         },
     })
         .then((res) => res.json())
