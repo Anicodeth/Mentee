@@ -23,9 +23,9 @@ const createNewUser = async (userDetails) => {
 const getUserById = async (userId) => {
   try {
 
-        // const foundUser = await User.findById(userId);
-        const foundUser = await User.findOne({ userId });
-        console.log(foundUser);
+        const foundUser = await User.findById(userId);
+        // const foundUser = await User.findOne({ userId });
+        // console.log(foundUser);
         return foundUser;
 
   } catch (error) {
