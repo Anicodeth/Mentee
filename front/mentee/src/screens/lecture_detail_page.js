@@ -4,7 +4,7 @@ import LectureDetail from "../components/lecture_detail";
 import Footer from "../components/footer";
 import MenteeHeader from "../components/mentee_header";
 import { localIp } from "../constants";
-import {getClass} from "../services/classesService";
+import {getAllClasses, getClass} from "../services/classesService";
 import {checkLogin} from "../services/userService";
 
 export default function LectureDetailPage() {
@@ -21,8 +21,14 @@ export default function LectureDetailPage() {
           return
       }
       console.log(lectureId);
-      getClass(lectureId).then(classDetail => {
-          setLectureDetail(classDetail);
+      // getClass(lectureId).then(classDetail => {
+      //     setLectureDetail(classDetail);
+      // }).catch(e=>{
+      //     console.log(e);
+      // });
+
+      getAllClasses().then(classes => {
+          setLectureDetail(classes[0]);
       }).catch(e=>{
           console.log(e);
       });
@@ -35,15 +41,15 @@ export default function LectureDetailPage() {
       {lectureDetail ? (
         <LectureDetail
           title={lectureDetail.title}
-          image={lectureDetail.instructor.image_src}
-          instructorName={lectureDetail.instructor.name}
-          instructorEmail={lectureDetail.instructor.email}
-          date={lectureDetail.date}
-          duration={lectureDetail.duration}
+          // image={lectureDetail.instructor.image_src}
+          instructorName={"Tigabu"}
+          instructorEmail={"tigabu@example.com"}
+          date={lectureDetail.schedule}
+          duration={"2 hours"}
           description={lectureDetail.description}
-          thumbnail={lectureDetail.thumbnail}
-          startTime={lectureDetail.startTime}
-          endTime={lectureDetail.endTime}
+          // thumbnail={lectureDetail.thumbnail}
+          // startTime={lectureDetail.startTime}
+          // endTime={lectureDetail.endTime}
           price={lectureDetail.price}
         />
       ) : (

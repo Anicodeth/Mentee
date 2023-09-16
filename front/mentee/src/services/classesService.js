@@ -37,7 +37,7 @@ export function getAllClasses(){
 }
 
 export async function getClass(classId){
-    return fetch(localIp + "/classes/" + classId, {
+    return fetch(localIp + "/classes/id/" + classId, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
