@@ -6,6 +6,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const Pusher = require("pusher");
 const bodyParser = require("body-parser");
+const paymentRoutes= require('./routes/paymentRoutes');
 const classRoutes = require("./routes/classRoutes");
 const userRoutes = require("./routes/userRoutes");
 const enrollmentRoutes = require('./routes/enrollmentRoutes');
@@ -372,7 +373,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 
 //play ground
-// app.use('/payment', paymentRoutes)
+app.use('/payment', paymentRoutes)
 
 
 server.listen(5000, () => console.log("server is running on port 5000"))

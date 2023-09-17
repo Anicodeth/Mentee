@@ -30,10 +30,15 @@ const initiatePayment = async (req, res) => {
     "tx_ref": textRef,
     "callback_url": api + "payment/verify-payment/" + textRef,
     "return_url": returnUrl,
+    "first_name": first_name,
+    "last_name": last_name,
+    "phone_number": phone_number,
   };
 
   // Make a request to the Chapa API to initiate payment
   await axios.post(chapaApi + "transaction/initialize", data, config).then((response) => {
+    console.log("the responseeeeee");
+    console.log(response.data.data);
     // Create a payment record
     Payment.create({
       userId, // Make sure you are passing the user ID
@@ -46,16 +51,12 @@ const initiatePayment = async (req, res) => {
 
     
     }).catch((err) => {
-      console.log(err);
+      console.log(err.response.data);
       res.status(500).json({ error: 'Error initiating payment' });
     });
 
 };
-
-
-
 /// Verify payment callback
-
 const handlePaymentCallback = async (req, res) => {
   try {
     console.log('Payment callback called');

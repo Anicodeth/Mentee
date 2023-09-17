@@ -17,4 +17,3 @@ export default function EnrollmentPage(){
         </div>
     </div>
 }
-// {classId, amount, email, first_name, last_name, phone_number, returnUrl}

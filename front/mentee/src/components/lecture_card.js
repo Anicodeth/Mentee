@@ -10,13 +10,14 @@ import {
   faCalendar,
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
+import {defaultThumbnail} from "../constants";
 export default function LectureCard(props) {
   localStorage.setItem("current_lecture",props.id);
   return (
     <Link to={"/lecture"}>
-      <div className="lecture-card bg-white flex w-10/12 gap-4 mx-auto my-1 relative px-5 py-12 lg:w-8/12 rounded shadow-md shadow-gray-400 cursor-pointer">
+      <div className="lecture-card bg-white flex w-10/12 gap-4 mx-auto my-1 relative px-5 py-4  lg:w-8/12 rounded shadow-md shadow-gray-400 cursor-pointer">
         <div className="lecture-image">
-          <img src={props.image} alt="lecture" className="w-60" />
+          <img src={defaultThumbnail} alt="lecture" className="h-40" />
         </div>
         <div className="lecture-content flex flex-col gap-2 ">
           <div className="lecture-title text-xl font-bold text-gray-700">

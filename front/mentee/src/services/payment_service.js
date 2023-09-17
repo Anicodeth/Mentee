@@ -2,7 +2,7 @@ import {localIp} from "../constants";
 
 
 export async function makePayment(paymentDetail) {
-  return await fetch(`${localIp}/payment/make-payment`, {
+  const response =  await fetch(`${localIp}/payment/make-payment`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -10,4 +10,10 @@ export async function makePayment(paymentDetail) {
     },
       body: JSON.stringify(paymentDetail)
       });
+
+  if(response.status === 200){
+      return response.json();
+    }else {
+      throw new Error("Payment failed");
+  }
 }

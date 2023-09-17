@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import {useParams, useNavigate, json} from "react-router-dom";
 import LectureDetail from "../components/lecture_detail";
 import Footer from "../components/footer";
 import MenteeHeader from "../components/mentee_header";
-import { localIp } from "../constants";
+import { localIp,baseFrontApi } from "../constants";
 import {getAllClasses, getClass} from "../services/classesService";
 import {checkLogin, getMe, getUser} from "../services/userService";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -19,10 +19,10 @@ export default function LectureDetailPage() {
 
   const _makePayment = async () => {
           const userInfo = await getMe();
-          console.log(userInfo);
-          const paymentDetail = {classId: lectureId,amount:lectureDetail.price,email:userInfo.email,first_name:userInfo.name.split(" ")[0],last_name:userInfo.name.split(" ")[1],phone_number:"",returnUrl:`${localIp}/mentee/lecture/${lectureId}`};
+          const paymentDetail = {classId: lectureId,amount:lectureDetail.price,email:userInfo.email,first_name:userInfo.name.split(" ")[0],last_name:userInfo.name.split(" ")[1],phone_number:"0948671562",returnUrl:`${baseFrontApi}/success`};
           const response = await makePayment(paymentDetail);
-          console.log(response);
+          const url = response.url;
+          window.location.replace(url);
   }
 
   useEffect(() => {
@@ -54,9 +54,9 @@ export default function LectureDetailPage() {
           title={lectureDetail.title}
           // image={lectureDetail.instructor.image_src}
           instructorName={instructorInfo.name}
-          instructorEmail={"tigabu@example.com"}
+          instructorEmail={instructorInfo.email}
           date={lectureDetail.schedule}
-          duration={"2 hours"}
+          duration={"120"}
           description={lectureDetail.description}
           // thumbnail={lectureDetail.thumbnail}
           // startTime={lectureDetail.startTime}

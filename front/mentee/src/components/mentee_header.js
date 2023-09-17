@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Profile from "./profile";
 import {PrimaryButton} from "./buttons";
 import {useState, useEffect, useRef} from "react";
-import {localIp} from "../constants";
+import {baseFrontApi, localIp} from "../constants";
 import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {getMe} from "../services/userService";
 
@@ -68,8 +68,8 @@ export default function MenteeHeader(props) {
       )}
         {
             isLogged ? (
-                    <div onClick={toProfile} className="profile flex gap-5 items-center absolute right-10 cursor-pointer ">
-                       <div className="profile-info flex gap-3 mr-4 border border-gray-300 px-4 py-2 bg-gray-200 rounded-3xl hover:border-gray-400 transition delay-50">
+                    <div className="profile flex gap-5 items-center absolute right-10 cursor-pointer ">
+                       <div onClick={toProfile} className="profile-info flex gap-3 mr-4 border border-gray-300 px-4 py-2 bg-gray-200 rounded-3xl hover:border-gray-400 transition delay-50">
                            <div className="profile-image">
                                <img className="w-12 h-12 rounded-full" src={!profileInfo.image_src?"./images/person.png":profileInfo.image_src} alt="profile"/>
                            </div>
@@ -78,7 +78,10 @@ export default function MenteeHeader(props) {
                            </div>
                        </div>
 
-                        <PrimaryButton text={"Log Out"} />
+                        <PrimaryButton text={"Log Out"} onPress={()=>{
+                            localStorage.removeItem("token");
+                            window.location.replace(`${baseFrontApi}/login`);
+                        }}/>
                         {/*<div className="bg-red-500 px-4 py-2 rounded text-gray-100 font-medium cursor-pointer hover:bg-red-400">Log Out</div>*/}
                     </div>
             ):

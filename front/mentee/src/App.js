@@ -15,6 +15,7 @@ import ProfilePage from "./screens/profile_page";
 import CreateLecture from "./components/create_lecture";
 import LoginPage from "./screens/login_page";
 import EnrollmentPage from "./screens/enrollment_page";
+import PaymentSuccess from "./screens/payment_success_page";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="lecture" element={<LectureDetailPage />} />
         <Route path="create" element={<CreateLecture />} />
         <Route path="enrollment" element={<EnrollmentPage />} />
+        <Route path="success" element={<PaymentSuccess />} />
         <Route path="*" element={<div>404</div>} />
       </Routes>
     </BrowserRouter>
