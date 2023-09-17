@@ -11,7 +11,7 @@ import LecturesHomePage from "./screens/lecture_home_page";
 import LectureDetailPage from "./screens/lecture_detail_page";
 import Dashboard from "./screens/dashboard";
 import ProfilePage from "./screens/profile_page";
-import CreateLecture from "./components/create_lecture";
+import CreateAndEditLecturePage from "./screens/create_and_edit_lecture";
 import LoginPage from "./screens/login_page";
 import EnrollmentPage from "./screens/enrollment_page";
 import PaymentSuccess from "./screens/payment_success_page";
@@ -32,7 +32,7 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="lecture" element={<LectureDetailPage />} />
-            <Route path="create" element={<CreateLecture />} />
+            <Route path="create" element={<CreateAndEditLecturePage />} />
             <Route path="enrollment" element={<EnrollmentPage />} />
             <Route path="success" element={<PaymentSuccess />} />
             <Route path="*" element={<div>404</div>} />

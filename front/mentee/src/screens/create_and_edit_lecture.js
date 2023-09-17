@@ -6,10 +6,10 @@ import {getMe} from "../services/userService";
 import {createClass, getClass, updateClass} from "../services/classesService";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import SideMessage from "./side_message";
-import {SecondaryButton} from "./buttons";
+import SideMessage from "../components/side_message";
+import {SecondaryButton} from "../components/buttons";
 
-export default function CreateLecture(props) {
+export default function CreateAndEditLecturePage(props) {
   const titleRef = useRef(null);
   const thumbnailRef = useRef(null);
 
