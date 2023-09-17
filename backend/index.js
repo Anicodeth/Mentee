@@ -373,7 +373,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 
 //play ground
-app.use('/payment', paymentRoutes)
+// app.use('/payment', paymentRoutes)
 
 
 server.listen(5000, () => console.log("server is running on port 5000"))
