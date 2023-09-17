@@ -3,7 +3,7 @@ import MenteeHeader from "../components/mentee_header";
 import {useState, useEffect, useRef} from "react";
 import Footer from "../components/footer";
 import {getMe} from "../services/userService";
-import {createClass} from "../services/classesService";
+import {createClass, getClass, updateClass} from "../services/classesService";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import SideMessage from "./side_message";
@@ -21,6 +21,9 @@ export default function CreateLecture(props) {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const isEdit = localStorage.getItem("is_edit") === "true";
+  const currentLectureId = localStorage.getItem("current_lecture");
 
   const validateCreateLecture = () => {
     if (
@@ -55,15 +58,29 @@ export default function CreateLecture(props) {
         "price": priceRef.current.value,
         "instructor": userInfo.id,
       }
-       createClass(newClassDetail).then(newClass=>{
-            setIsLoading(false);
-            setIsSuccess(true);
+       if(isEdit){
+         newClassDetail["id"] = currentLectureId;
+         updateClass(newClassDetail).then(newClass=>{
+           setIsLoading(false);
+           setIsSuccess(true);
 
-       }).catch(e=>{
-            setIsLoading(false);
-            setIsError(true);
-            setErrorMessage(e.message.toString());
-       })
+         }).catch(e=>{
+           setIsLoading(false);
+           setIsError(true);
+           setErrorMessage(e.message.toString());
+         })
+       }
+       else{
+         createClass(newClassDetail).then(newClass=>{
+           setIsLoading(false);
+           setIsSuccess(true);
+
+         }).catch(e=>{
+           setIsLoading(false);
+           setIsError(true);
+           setErrorMessage(e.message.toString());
+         })
+       }
     }).catch(e=>{
         setIsLoading(false);
         setIsError(true);
@@ -113,15 +130,29 @@ export default function CreateLecture(props) {
     },
   ];
 
-  return (
-    <div className="bg-gray-200 min-h-screen">
+  useEffect(() => {
+   if(isEdit){
+     getClass(currentLectureId).then(lecture=> {
+       titleRef.current.value = lecture.name;
+       descriptionRef.current.value = lecture.description;
+       priceRef.current.value = lecture.price;
+       dateRef.current.value = lecture.schedule.substring(0,10);
+       // setIsEdit(true);
+     }).catch(e=> {
+       setIsError(true);
+       setErrorMessage(e.message.toString());
+     });
+   }
+    }, []);
+
+    return (
+        <div className="bg-gray-200 min-h-screen">
       <MenteeHeader search={false} />
       <div className="max-w-4xl lg:mx-auto mt-10 bg-white rounded-lg shadow-md mx-10 shadow-gray-400">
         <div className="py-4 px-6">
           <div className="text-2xl font-semibold text-gray-700 text-center">
-            Create a new Lecture
+            {isEdit ? "Edit Lecture" : "Create Lecture"}
           </div>
-
           {fields.map((field) => {
             return (
               <div className="mb-6">
@@ -154,12 +185,12 @@ export default function CreateLecture(props) {
           })}
 
           <div className="flex justify-end gap-4">
-            <SecondaryButton isLoading={isLoading} text={"Create"} onPress={createLecture}/>
+            <SecondaryButton isLoading={isLoading} text={isEdit ? "Save" : "Create"} onPress={createLecture}/>
             {isError ? (
                <SideMessage message={errorMessage}/>
             ) : null}
             {isSuccess ? (
-                <SideMessage message={"Course successfully created!"} isError={false}/>
+                <SideMessage message={isEdit ? "Course successfully updated!":"Course successfully created!"} isError={false}/>
             ) : null}
           </div>
         </div>

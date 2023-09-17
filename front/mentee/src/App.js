@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
@@ -16,26 +15,30 @@ import CreateLecture from "./components/create_lecture";
 import LoginPage from "./screens/login_page";
 import EnrollmentPage from "./screens/enrollment_page";
 import PaymentSuccess from "./screens/payment_success_page";
+// 1. import `ChakraProvider` component
+import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="signup" element={<SignupPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="class/:id/:isteacher" element={<ClassPage />} />
-        <Route path="status/:id" element={<ClassStatusPage />} />
-        <Route path="lectures" element={<LecturesHomePage />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="lecture" element={<LectureDetailPage />} />
-        <Route path="create" element={<CreateLecture />} />
-        <Route path="enrollment" element={<EnrollmentPage />} />
-        <Route path="success" element={<PaymentSuccess />} />
-        <Route path="*" element={<div>404</div>} />
-      </Routes>
-    </BrowserRouter>
+      <ChakraProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="signup" element={<SignupPage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="class/:id/:isteacher" element={<ClassPage />} />
+            <Route path="status/:id" element={<ClassStatusPage />} />
+            <Route path="lectures" element={<LecturesHomePage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="lecture" element={<LectureDetailPage />} />
+            <Route path="create" element={<CreateLecture />} />
+            <Route path="enrollment" element={<EnrollmentPage />} />
+            <Route path="success" element={<PaymentSuccess />} />
+            <Route path="*" element={<div>404</div>} />
+          </Routes>
+        </BrowserRouter>
+      </ChakraProvider>
   );
 }
 

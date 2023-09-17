@@ -6,7 +6,7 @@ import { ThreeCircles } from  'react-loader-spinner'
 
 
 import auth from "../services/authService";
-import useLogin from "../services/hooks/useLogin";
+import useLogin from "../hooks/useLogin";
 export default function LoginPage() {
     const emailRef = useRef(null);
     const passwordRef = useRef(null);

@@ -125,7 +125,7 @@ export default function Dashboard() {
               Completed
             </div>
           </div>
-          <ClassLister lectures={allLectures} isLoading={isLoading}/>
+          <ClassLister lectures={allLectures} isLoading={isLoading} isMyCourse={true}/>
         </div>
       </div>
       <nav className="flex items-center justify-center mt-12">

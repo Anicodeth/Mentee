@@ -3,19 +3,23 @@
 // we will use the star icon to favorite the lecture
 // we will use the clock icon to show the duration of the lecture
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {
   faStopwatch,
   faDollar,
   faCalendar,
-  faClock,
+  faClock, faTrash, faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import {defaultThumbnail} from "../constants";
+import DeleteDialog from "./delete_dialog";
 export default function LectureCard(props) {
-  localStorage.setItem("current_lecture",props.id);
+  const history = useNavigate();
+  const saveLectureId = () => {
+    localStorage.setItem("current_lecture",props.id);
+    history("/lecture");
+  }
   return (
-    <Link to={"/lecture"}>
-      <div className="lecture-card bg-white flex w-10/12 gap-4 mx-auto my-1 relative px-5 py-4  lg:w-8/12 rounded shadow-md shadow-gray-400 cursor-pointer">
+      <div onClick={saveLectureId} className="lecture-card bg-white flex w-10/12 gap-4 mx-auto my-1 relative px-5 py-4  lg:w-8/12 rounded shadow-md shadow-gray-400 cursor-pointer">
         <div className="lecture-image">
           <img src={defaultThumbnail} alt="lecture" className="h-40" />
         </div>
@@ -48,8 +52,16 @@ export default function LectureCard(props) {
             <FontAwesomeIcon icon={faDollar} className="mr-2 text-black" />
             {props.price}
           </div>
+          {props.isMyCourse && <div className="z-50 text-gray-700 font-semibold absolute bottom-4 right-5">
+            <DeleteDialog lectureId={props.id}/>
+            <button onClick={(e)=>{
+              e.stopPropagation();
+              localStorage.setItem("current_lecture",props.id);
+              localStorage.setItem("is_edit","true");
+              history("/create");
+            }} className="mr-3 bg-blue-600 transition delay-50 text-lg text-white px-3 py-1 font-semibold rounded">Edit Course</button>
+          </div>}
         </div>
       </div>
-    </Link>
   );
 }

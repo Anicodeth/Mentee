@@ -22,6 +22,7 @@ export function ClassLister(props){
                         duration={"2 hours"}
                         time={lecture.schedule.substring(11,19)}
                         id={lecture._id}
+                        isMyCourse = {props.isMyCourse}
                     />
                 );
             })

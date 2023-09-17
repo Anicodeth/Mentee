@@ -1,4 +1,4 @@
-import auth from "../authService";
+import auth from "../services/authService";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 

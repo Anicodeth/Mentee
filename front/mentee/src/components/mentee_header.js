@@ -59,11 +59,12 @@ export default function MenteeHeader(props) {
         </div>
       )}
       {profileInfo.role === "instructor" && (props.createLecture === null || props.createLecture !== false) && (
-        <div className="create-lecture-btn bg-green-600 text-white px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-green-700 cursor-pointer transition delay-50 font-semibold">
+        <div onClick={()=>{
+            localStorage.setItem("is_edit","false");
+            history("/create");
+        }} className="create-lecture-btn bg-green-600 text-white px-4 py-2 rounded-2xl flex items-center gap-2 hover:bg-green-700 cursor-pointer transition delay-50 font-semibold">
           <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
-          <Link to={"/create"}>
             <div>Create a Lecture</div>
-          </Link>
         </div>
       )}
         {

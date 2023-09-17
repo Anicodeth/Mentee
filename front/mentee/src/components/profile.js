@@ -5,7 +5,7 @@ import {defaultPersonProfile} from "../constants";
 export default function Profiler(props) {
   return (
     <div className="h-44 w-fit my-8 bg-white flex items-center px-8 gap-8 justify-center m-auto rounded">
-      <img src={defaultPersonProfile} className="w-28"></img>
+      <img alt="" src={defaultPersonProfile} className="w-28"></img>
       <div className="info flex flex-col flex">
         <div className="text-xl font-semibold">{props.name}</div>
         <div className="text-gray-600">{props.email}</div>

@@ -6,7 +6,7 @@ import { ThreeCircles } from  'react-loader-spinner'
 
 
 import auth from "../services/authService";
-import useSignup from "../services/hooks/useSignup";
+import useSignup from "../hooks/useSignup";
 
 export default function SignupPage() {
   const [role,setRole] = useState("");
