@@ -8,6 +8,7 @@ import {getAllClasses, getMyClasses, searchClasses as searchClassesService} from
 import {checkLogin, getMe} from "../services/userService";
 import {useNavigate} from "react-router-dom";
 import {ClassLister} from "../components/class_lister";
+import {getMyEnrollments} from "../services/enrollmentService";
 
 export default function Dashboard() {
   const [allLectures, setAllLectures] = useState(null);
@@ -62,7 +63,7 @@ export default function Dashboard() {
       getMe().then(userInfo=>{
           setProfileInfo(userInfo);
           if(userInfo["role"] === "student"){
-              getAllClasses().then((classes)=>{
+              getMyEnrollments().then((classes)=>{
                   setIsLoading(false);
                   setUpcomingLectures(classes);
                   setAllLectures(classes);
@@ -104,7 +105,7 @@ export default function Dashboard() {
 
   return (
     <div className="bg-gray-200 min-h-screen">
-      <MenteeHeader search={true} onSearch={searchClasses} profileInfo={profileInfo}/>
+      <MenteeHeader search={true} onSearch={searchClasses}/>
       <div className="courses mt-4 ">
         <div className="flex flex-col gap-2">
           <div className="title text-2xl font-semibold text-gray-700 px-12 py-8 flex gap-1 justify-center">
@@ -125,7 +126,7 @@ export default function Dashboard() {
               Completed
             </div>
           </div>
-          <ClassLister lectures={allLectures} isLoading={isLoading} isMyCourse={true}/>
+          <ClassLister lectures={allLectures} isLoading={isLoading} isMyCourse={true} isStudent={profileInfo.role === "student"}/>
         </div>
       </div>
       <nav className="flex items-center justify-center mt-12">

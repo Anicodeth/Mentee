@@ -20,9 +20,16 @@ export default function LectureDetailPage() {
   const _makePayment = async () => {
           const userInfo = await getMe();
           const paymentDetail = {classId: lectureId,amount:lectureDetail.price,email:userInfo.email,first_name:userInfo.name.split(" ")[0],last_name:userInfo.name.split(" ")[1],phone_number:"0948671562",returnUrl:`${baseFrontApi}/success`};
-          const response = await makePayment(paymentDetail);
-          const url = response.url;
-          window.location.replace(url);
+          try {
+              const response = await makePayment(paymentDetail);
+              const url = response.url;
+              const text_ref = response.textRef;
+              localStorage.setItem("text_ref",text_ref);
+              window.location.replace(url);
+          }
+          catch (e){
+              console.log(e);
+          }
   }
 
   useEffect(() => {

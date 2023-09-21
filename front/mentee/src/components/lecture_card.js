@@ -11,7 +11,9 @@ import {
   faClock, faTrash, faEdit,
 } from "@fortawesome/free-solid-svg-icons";
 import {defaultThumbnail} from "../constants";
-import DeleteDialog from "./delete_dialog";
+import PromptDialog from "./delete_dialog";
+import {deleteClass} from "../services/classesService";
+import {withdrawPayment} from "../services/payment_service";
 export default function LectureCard(props) {
   const history = useNavigate();
   const saveLectureId = () => {
@@ -52,14 +54,27 @@ export default function LectureCard(props) {
             <FontAwesomeIcon icon={faDollar} className="mr-2 text-black" />
             {props.price}
           </div>
-          {props.isMyCourse && <div className="z-50 text-gray-700 font-semibold absolute bottom-4 right-5">
-            <DeleteDialog lectureId={props.id}/>
+          {!props.isStudent && props.isMyCourse && <div className="z-50 text-gray-700 font-semibold absolute bottom-4 right-5">
+            <button onClick={(e)=>{
+              e.stopPropagation();
+            }} className="mr-3 bg-blue-600 transition delay-50 text-lg text-white px-3 py-1 font-semibold rounded"></button>
+          </div>}
+          {props.isStudent && props.isMyCourse && <div className="z-50 text-gray-700 font-semibold absolute bottom-4 right-5">
+            <PromptDialog lectureId={props.id} title={"Withdraw Payment"} description={"Are you sure you want to withdraw from the lecture? This action can't be undone"} onPressFunction={withdrawPayment}/>
+          </div>}
+            {props.isMyCourse && !props.isStudent && <div className="z-50 text-gray-700 font-semibold absolute bottom-4 right-5">
+            <button onClick={(e)=>{
+              e.stopPropagation();
+              localStorage.setItem("current_lecture",props.id);
+              history("/enrolled-students");
+            }} className="mr-3 bg-blue-600 transition delay-50 text-lg text-white px-3 py-1 font-semibold rounded">Enrolled Students</button>
             <button onClick={(e)=>{
               e.stopPropagation();
               localStorage.setItem("current_lecture",props.id);
               localStorage.setItem("is_edit","true");
               history("/create");
             }} className="mr-3 bg-blue-600 transition delay-50 text-lg text-white px-3 py-1 font-semibold rounded">Edit Course</button>
+              <PromptDialog lectureId={props.id} title={"Delete Course"} description={"Are you sure you want to delete the lecture? This action can't be undone"} onPressFunction={deleteClass}/>
           </div>}
         </div>
       </div>

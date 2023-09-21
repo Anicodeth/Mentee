@@ -20,21 +20,18 @@ export async function enrollUser(classDetail){
 }
 
 export async function getMyEnrollments(){
-    return fetch(localIp + `/enrollments/user`, {
+    const response = await fetch(localIp + `/enrollments/user`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
             "Authorization": localStorage.getItem("token")
         },
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            console.log(data);
-            return data;
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+    });
+    if(response.ok){
+        const data = response.json();
+        return data;
+    }
+    throw("Failed to get enrolled courses");
 }
 
 export async function getEnrolledStudents(classId){
@@ -53,4 +50,23 @@ export async function getEnrolledStudents(classId){
         .catch((err) => {
             console.log(err);
         });
+}
+
+export async function confirmEnrollment(textRef){
+    console.log(textRef);
+    const response = await fetch(localIp + `/payment/verify-payment/${textRef}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+    });
+    if(response.ok){
+        const data = response.json();
+        console.log("successfully confirmed enrollment");
+        console.log(data);
+        return data;
+    }
+    throw("Failed to confirm enrollment");
+
 }

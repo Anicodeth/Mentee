@@ -34,11 +34,11 @@ const initiatePayment = async (req, res) => {
     "last_name": last_name,
     "phone_number": phone_number,
   };
-
   // Make a request to the Chapa API to initiate payment
   await axios.post(chapaApi + "transaction/initialize", data, config).then((response) => {
-    console.log("the responseeeeee");
-    console.log(response.data.data);
+
+    console.log("the chapa respponseee");
+    console.log(response)
     // Create a payment record
     Payment.create({
       userId, // Make sure you are passing the user ID
@@ -47,7 +47,7 @@ const initiatePayment = async (req, res) => {
       status: 'pending',
     });
     //return the checkout url
-    res.send({ url: response.data.data.checkout_url });
+    res.send({ url: response.data.data.checkout_url, textRef: textRef });
 
     
     }).catch((err) => {
@@ -60,25 +60,41 @@ const initiatePayment = async (req, res) => {
 const handlePaymentCallback = async (req, res) => {
   try {
     console.log('Payment callback called');
-    const userId = req.params.id.split('-')[0];
-    const classId = req.params.id.split('-')[1];
+    const userid = req.params.id.split('-')[0];
+    const classid = req.params.id.split('-')[1];
+    console.log(`the text ref ${req.params.id}`)
+    console.log(userid)
+    console.log(classid)
     
     // Use Chapa API to verify the payment status
     const verificationResponse = await axios.get("https://api.chapa.co/v1/transaction/verify/" + req.params.id, config);
 
     if (verificationResponse.data.data.status === 'success') {
       // Payment is successful, update the payment record in your database
-      const payment = await Payment.findOne({
-        where: {
-          userId,
-          classId,
+
+      const payment = await Payment.findOne(
+        {
+          userId:userid,
+          classId:classid,
           status: 'pending', // Ensure it's still in pending status to avoid double updates
         },
-      });
+      );
+      console.log(payment);
 
       if (payment) {
         // Update the payment status to 'completed'
-        await payment.update({ status: 'completed' });
+
+        await payment.updateOne(
+            {
+              userId:userid,
+              classId:classid,
+              status: 'pending', // Ensure it's still in pending status to avoid double updates
+            },
+            {
+            $set: { status: 'completed' }
+            }
+        );
+
         console.log("Payment record updated to 'completed'");
         res.status(200).json({ message: 'Payment was successfully verified' });
       } else {

@@ -2,9 +2,21 @@ import MenteeHeader from "../components/mentee_header";
 import Footer from "../components/footer";
 import {SecondaryButton} from "../components/buttons";
 import {useNavigate} from "react-router-dom";
+import {useEffect} from "react";
+import {confirmEnrollment} from "../services/enrollmentService";
 
 export default function PaymentSuccess(){
     const history = useNavigate();
+    const textRef = localStorage.getItem("text_ref");
+    void useEffect(()=>{
+        if(textRef){
+            confirmEnrollment(textRef).then(res=>{
+                console.log(res);
+            }).catch(e=>{
+                console.log("Error while confirming enrollment",e);
+            });
+        }
+    },[])
     return   <div className="bg-gray-200 min-h-screen flex flex-col justify-between">
         <MenteeHeader search={false} />
         <div className="flex justify-center items-center">

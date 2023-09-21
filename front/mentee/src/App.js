@@ -13,10 +13,11 @@ import Dashboard from "./screens/dashboard";
 import ProfilePage from "./screens/profile_page";
 import CreateAndEditLecturePage from "./screens/create_and_edit_lecture";
 import LoginPage from "./screens/login_page";
-import EnrollmentPage from "./screens/enrollment_page";
 import PaymentSuccess from "./screens/payment_success_page";
 // 1. import `ChakraProvider` component
 import { ChakraProvider } from '@chakra-ui/react'
+import EnrolledStudentsListerPage from './screens/enrolled_students_page';
+
 
 function App() {
   return (
@@ -33,8 +34,8 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="lecture" element={<LectureDetailPage />} />
             <Route path="create" element={<CreateAndEditLecturePage />} />
-            <Route path="enrollment" element={<EnrollmentPage />} />
             <Route path="success" element={<PaymentSuccess />} />
+            <Route path="/enrolled-students" element={<EnrolledStudentsListerPage />} />
             <Route path="*" element={<div>404</div>} />
           </Routes>
         </BrowserRouter>

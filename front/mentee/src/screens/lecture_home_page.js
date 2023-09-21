@@ -26,7 +26,6 @@ export default function LecturesHomePage() {
 
   useEffect(() => {
       const isLoggedIn = checkLogin();
-
       if(!isLoggedIn){
           console.log("not logged in");
           history("/login");

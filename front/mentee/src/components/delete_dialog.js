@@ -14,7 +14,7 @@ import {SecondaryButton} from "./buttons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 
-export default function DeleteDialog(props) {
+export default function PromptDialog(props) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = useRef(null)
     const [isLoading,setIsLoading] = useState(false)
@@ -48,7 +48,7 @@ export default function DeleteDialog(props) {
             <button onClick={(e)=>{
                 e.stopPropagation();
                 onOpen();
-            }} className="mr-3 bg-red-600 transition delay-50 text-lg text-white px-3 py-1 font-semibold rounded">Delete Course</button>
+            }} className="mr-3 bg-red-600 transition delay-50 text-lg text-white px-3 py-1 font-semibold rounded">{props.title}</button>
             <AlertDialog
                 motionPreset='slideInBottom'
                 leastDestructiveRef={cancelRef}
@@ -59,17 +59,17 @@ export default function DeleteDialog(props) {
                 <AlertDialogOverlay />
 
                 <AlertDialogContent>
-                    <AlertDialogHeader>Delete Lecture?</AlertDialogHeader>
+                    <AlertDialogHeader>{props.title}?</AlertDialogHeader>
                     <AlertDialogCloseButton />
                     <AlertDialogBody>
-                        Are you sure you want to delete the lecture. This action can't be undone.
+                        {props.description}
                     </AlertDialogBody>
                     <AlertDialogFooter>
                         <Button ref={cancelRef} onClick={onClose}>
                             No
                         </Button>
                     <Button className="w-16" colorScheme='red' ml={3} onClick={async ()=>{
-                        await deleteCourse(props.lectureId);
+                        await props.onPressFunction(props.lectureId);
                     }}>
                         {isLoading?<FontAwesomeIcon icon={faSpinner}/>:"Yes"}
                     </Button>
