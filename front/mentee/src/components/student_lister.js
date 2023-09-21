@@ -2,9 +2,10 @@ import LectureCard from "./lecture_card";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 import InstructorProfile from "./instructor_profile";
+import {Skeleton} from "@chakra-ui/react";
 
 export function StudentLister(props){
-    const getClassesList = ()=>{
+    const getStudentsList = ()=>{
             if(props.students && props.students.length === 0){
                 return (
                     <div className="text-2xl font-normal m-auto justify-center items-center ">
@@ -19,11 +20,15 @@ export function StudentLister(props){
             })
 
             else if(props.isLoading) {
-                return <div className="lecture-detail mx-auto mt-40 flex justify-center">
-                    <div className="text-2xl font-semibold m-auto justify-center items-center ">
-                        <FontAwesomeIcon icon={faSpinner}/>
-                    </div>
-                </div>
+                var loading = [];
+                for (let i = 0; i < 4; i++) {
+                    loading.push(
+                        <div className="w-full flex flex-col items-center justify-center">
+                            <Skeleton width="60%" height="200px" fadeDuration={4}/>
+                        </div>
+                    );
+                }
+                return loading;
             }
             else {
                 return (
@@ -34,12 +39,6 @@ export function StudentLister(props){
             }
     }
     return <div className="flex flex-col gap-2">
-        {getClassesList()}
-
-        {/*{!props.isLoading && !props.students && <div className="lecture-detail mx-auto my-40 flex justify-center">*/}
-        {/*    <div className="text-2xl font-normal text-red-700 m-auto justify-center items-center ">*/}
-        {/*        An error occurred. Please try again*/}
-        {/*    </div>*/}
-        {/*</div>}*/}
+        {getStudentsList()}
     </div>
 }

@@ -25,36 +25,61 @@ export default function SignupPage() {
       type: "text",
       placeholder: "Enter your first name",
       id: "first_name",
-        ref:firstNameRef
+        ref:firstNameRef,
+        onKeyPress: (e) => {
+            if (e.key === "Enter") {
+                lastNameRef.current.focus();
+            }
+        }
     },
     {
       label: "Last Name",
       type: "text",
       placeholder: "Enter your last name",
       id: "last_name",
-        ref:lastNameRef
+        ref:lastNameRef,
+        onKeyPress: (e) => {
+            if (e.key === "Enter") {
+                emailRef.current.focus();
+            }
+        }
     },
     {
       label: "Email",
       type: "email",
       placeholder: "Enter your email",
       id: "email",
-
-ref:  emailRef  },
+      ref:  emailRef,
+      onKeyPress: (e) => {
+        if (e.key === "Enter") {
+           passwordRef.current.focus();
+        }
+      }
+    },
 
     {
       label: "Create Password",
       type: "password",
       placeholder: "Enter your password",
       id: "password",
-
-ref:  passwordRef  },
+      ref:  passwordRef,
+        onKeyPress: (e) => {
+            if (e.key === "Enter") {
+                confirm_passwordRef.current.focus();
+            }
+        }
+    },
     {
       label: "Confirm Password",
       type: "password",
       placeholder: "Confirm your password",
       id: "confirm_password",
-        ref:confirm_passwordRef
+      ref:confirm_passwordRef,
+        onKeyPress: (e) => {
+            if (e.key === "Enter") {
+                handleSignup();
+            }
+        }
     },
 
   ];
@@ -74,7 +99,7 @@ ref:  passwordRef  },
 
   return (
     <div className="h-screen bg-gray-200 flex justify-center items-center">
-      <div className="w-fit h-fit bg-white flex flex-col justify-center py-10 px-1 items-center rounded rounded-2xl shadow-2xl">
+      <div className="w-fit lg:w-4/12 h-fit bg-white flex flex-col justify-center py-10 px-1 items-center rounded rounded-2xl shadow-2xl">
         <div className="text-center">
           <h1 className="text-3xl font-bold">
             {"Welcome, Join us!"}
@@ -84,7 +109,7 @@ ref:  passwordRef  },
           </p>
         </div>
 
-        <div className="flex flex-col p-4 items-center w-full">
+        <div className="flex flex-col p-4 items-center lg:w-10/12 w-full">
           {fields.map((field, index) => {
               return (
                 <div key={index} className="w-full my-3">
@@ -92,11 +117,14 @@ ref:  passwordRef  },
                     {field.label}
                   </label>
                   <input
-                    className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
+                    className="w-96 lg:w-full border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
                       ref={field.ref}
                     type={field.type}
                     placeholder={field.placeholder}
                     id={field.id}
+                    onKeyDown={(e)=>{
+                        field.onKeyPress(e);
+                    }}
                   />
                 </div>
               );

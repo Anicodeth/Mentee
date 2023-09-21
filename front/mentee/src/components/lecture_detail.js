@@ -12,7 +12,7 @@ import InstructorProfile from "./instructor_profile";
 export default function LectureDetail(props) {
   let lectureId = useParams().id;
   return (
-    <div className="lecture-detail w-10/12 m-auto mt-10 bg-white lg:w-5/12 shadow-md shadow-gray-400">
+    <div className="lecture-detail w-10/12 m-auto mt-10 bg-white lg:w-6/12 shadow-md shadow-gray-400">
       <div className="lecture-image w-full">
         <img src={defaultThumbnail} alt="lecture thumbnail" className="w-full" />
       </div>

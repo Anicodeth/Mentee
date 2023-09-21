@@ -9,7 +9,8 @@ import {checkLogin, getMe, getUser} from "../services/userService";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 import {makePayment} from "../services/payment_service";
-
+import {Skeleton} from "@chakra-ui/react";
+import { Spinner } from '@chakra-ui/react'
 export default function LectureDetailPage() {
   const lectureId = localStorage.getItem("current_lecture");
   const [lectureDetail, setLectureDetail] = useState(null);
@@ -54,7 +55,7 @@ export default function LectureDetailPage() {
   }, []);
   // title, image, instructorName, date, duration, description, isActive
   return (
-    <div className="bg-gray-200 min-h-screen">
+    <div className="bg-gray-200 min-h-screen flex flex-col justify-between">
       <MenteeHeader search={false} />
       {(lectureDetail && instructorInfo)  ? (
         <LectureDetail
@@ -72,11 +73,16 @@ export default function LectureDetailPage() {
           onEnroll={_makePayment}
         />
       ) : (
-        <div className="lecture-detail mx-auto mt-40 flex justify-center">
-          <div className="text-2xl font-semibold m-auto justify-center items-center ">
-            <FontAwesomeIcon icon={faSpinner} />
+          <div className="w-full h-full flex flex-col justify-center items-center">
+              <Spinner
+                  thickness='4px'
+                  speed='0.65s'
+                  emptyColor='gray.200'
+                  color='blue.500'
+                  size='xl'
+              />
           </div>
-        </div>
+
       )}
       <div className="">
         <Footer />

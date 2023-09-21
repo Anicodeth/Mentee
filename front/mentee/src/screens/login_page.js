@@ -19,15 +19,26 @@ export default function LoginPage() {
             type: "email",
             placeholder: "Enter your email",
             id: "email",
-
-            ref:  emailRef  },
+            ref:  emailRef,
+            onKeyPress: (e) => {
+                if (e.key === "Enter") {
+                    // now we will put the focus on the password field
+                    passwordRef.current.focus();
+                }
+            }
+        },
 
         {
             label: "Password",
             type: "password",
             placeholder: "Enter your password",
             id: "password",
-            ref:  passwordRef  },
+            ref:  passwordRef,
+            onKeyPress: (e) => {
+                if (e.key === "Enter") {
+                handleLogin()}
+            }
+        },
 
     ];
 
@@ -41,17 +52,17 @@ export default function LoginPage() {
 
     return (
         <div className="h-screen bg-gray-200 flex justify-center items-center">
-            <div className="w-fit h-fit bg-white flex flex-col justify-center py-10 px-1 items-center rounded rounded-2xl shadow-2xl">
+            <div className="min-w-96 w-fit lg:w-3/12 h-fit bg-white flex flex-col justify-center py-10 px-1 items-center rounded-2xl shadow-2xl">
                 <div className="text-center">
                     <h1 className="text-3xl font-bold">
                         {"Welcome Back!"}
                     </h1>
-                    <p className="text-gray-600 w-8/12 m-auto my-1">
+                    <p className="text-gray-600  m-auto my-1">
                         { "Enter your details to log in"}
                     </p>
                 </div>
 
-                <div className="flex flex-col p-4 items-center w-full">
+                <div className="flex flex-col p-4 items-center w-full lg:w-10/12">
                     {fields.map((field, index) => {
                         return (
                             <div key={index} className="w-full my-3">
@@ -59,11 +70,14 @@ export default function LoginPage() {
                                     {field.label}
                                 </label>
                                 <input
-                                    className="md:w-96 border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
+                                    className="lg:w-full border border-gray-300 rounded px-5 py-2 text-medium focus:outline-none focus:border-gray-400"
                                     ref={field.ref}
                                     type={field.type}
                                     placeholder={field.placeholder}
                                     id={field.id}
+                                    onKeyDown={(e)=>{
+                                        field.onKeyPress(e);
+                                    }}
                                 />
                             </div>
                         );
@@ -88,15 +102,6 @@ export default function LoginPage() {
                         </p>
                     </div>
                     <div className={`${errorMessage===""?"hidden":""} mt-4 py-2 -mb-10 flex justify-center ${!isLoading?"fixed bottom-12 left-5 bg-red-500":""} `}>
-                        {/*{isLoading && <ThreeCircles*/}
-                        {/*    height = "40"*/}
-                        {/*    width = "40"*/}
-                        {/*    radius = "9"*/}
-                        {/*    color = 'grey'*/}
-                        {/*    ariaLabel = 'three-dots-loading'*/}
-                        {/*    wrapperStyle*/}
-                        {/*    wrapperClass*/}
-                        {/*/>}*/}
                         {isError && <p className="text-white text-xl font-medium px-4 py-2">{errorMessage}</p>}
                     </div>
                 </div>

@@ -65,3 +65,19 @@ export async function getUser(userId){
             console.log(err);
         });
 }
+
+export function getAllUsers(){
+    const response = fetch(`${localIp}/users`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+    });
+    if(response.ok){
+        return response.json();
+    }
+    else{
+        throw new Error("Something went wrong while fetching users");
+    }
+}

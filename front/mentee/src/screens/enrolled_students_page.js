@@ -37,13 +37,15 @@ export default function EnrolledStudentsListerPage() {
             });
     },[]);
     return (
-        <div className="bg-gray-200 min-h-screen">
-            <MenteeHeader />
+        <div className="bg-gray-200 min-h-screen flex flex-col justify-between">
+            <div>
+                <MenteeHeader />
+                <div className="title text-2xl font-semibold text-gray-700 px-12 py-8 flex gap-1 justify-center">
+                    <div>Enrolled Students</div>
+                </div>
+            </div>
             <div className="courses mt-4 ">
                 <div className="flex flex-col gap-2">
-                    <div className="title text-2xl font-semibold text-gray-700 px-12 py-8 flex gap-1 justify-center">
-                        <div>Enrolled Students</div>
-                    </div>
                     <StudentLister students={allStudents} isLoading={isLoading}/>
                 </div>
             </div>

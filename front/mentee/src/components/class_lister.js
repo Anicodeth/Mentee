@@ -1,6 +1,5 @@
 import LectureCard from "./lecture_card";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faSpinner} from "@fortawesome/free-solid-svg-icons";
+import {Skeleton} from "@chakra-ui/react";
 
 export function ClassLister(props){
     const getClassesList = ()=>{
@@ -11,29 +10,34 @@ export function ClassLister(props){
                     </div>
                 )
             }
-            else if(props.lectures && props.lectures.length > 0) return props.lectures.map((lecture) => {
-                return (
-                    <LectureCard
-                        image={lecture.thumbnail}
-                        title={lecture.name}
-                        description={lecture.description}
-                        price={lecture.price}
-                        date={lecture.schedule.substring(0,10)}
-                        duration={"2 hours"}
-                        time={lecture.schedule.substring(11,19)}
-                        id={lecture._id}
-                        isMyCourse = {props.isMyCourse}
-                        isStudent = {props.isStudent}
-                    />
-                );
-            })
+            else if(props.lectures && props.lectures.length > 0) return <div className="flex flex-col">
+                {props.lectures.map((lecture) => {
+                    return (
+                        <LectureCard
+                            image={lecture.thumbnail}
+                            title={lecture.name}
+                            description={lecture.description}
+                            price={lecture.price}
+                            date={lecture.schedule.substring(0, 10)}
+                            duration={"2 hours"}
+                            time={lecture.schedule.substring(11, 19)}
+                            id={lecture._id}
+                            isMyCourse={props.isMyCourse}
+                        />);
+                })
+    })
+            </div>
 
             else if(props.isLoading) {
-                return <div className="lecture-detail mx-auto mt-40 flex justify-center">
-                    <div className="text-2xl font-semibold m-auto justify-center items-center ">
-                        <FontAwesomeIcon icon={faSpinner}/>
-                    </div>
-                </div>
+                var loading = [];
+                for (let i = 0; i < 4; i++) {
+                    loading.push(
+                        <div className="w-full flex flex-col items-center justify-center">
+                            <Skeleton width="60%" height="200px" fadeDuration={4}/>
+                        </div>
+                    );
+                }
+                return loading;
             }
             else {
                 return (

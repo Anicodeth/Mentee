@@ -47,14 +47,16 @@ export default function LecturesHomePage() {
   }, []);
 
   return (
-    <div className="bg-gray-200 min-h-screen">
-      <MenteeHeader search={true} onSearch={searchClasses} createLecture={true} />
+    <div className="bg-gray-200 min-h-screen flex flex-col justify-between">
+        <div>
+            <MenteeHeader search={true} onSearch={searchClasses} createLecture={true} />
+            <div className="title text-3xl font-semibold text-gray-700 px-12 py-10 lg:px-40 md:px-20 text-center">
+                Discover Lectures
+            </div>
         <div className="courses mt-4 ">
           {/* the title first */}
-          <div className="title text-3xl font-semibold text-gray-700 px-12 py-10 lg:px-40 md:px-20 text-center">
-            Discover Courses
-          </div>
           <ClassLister lectures={allLectures} isLoading={isLoading} />
+        </div>
         </div>
       <div className="footer w-full  ">
         <Footer />
