@@ -22,7 +22,7 @@ const getUserEnrollments = async (req, res) => {
         const { userId } = req.user; // From the authenticated user
 
         const userEnrollments = await enrollmentService.getUserEnrollments(userId);
-        res.json(userEnrollments);
+        res.status(200).json(userEnrollments);
 
   } catch (error) {
 
