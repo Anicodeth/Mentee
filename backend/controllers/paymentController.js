@@ -3,7 +3,7 @@ const Payment= require('../models/Payment');
 const PendingPayment = require('../models/PendingPayment');
 const classService = require("../services/classService");
 const axios = require('axios');
-
+const enrollmentService = require('../services/enrollmentService');
 CHAPA_AUTH = "CHASECK_TEST-c2wIJNJVQxlKy0Xigv9duKvqXmMQj7YD";
 const config = {
     headers: {
@@ -95,6 +95,10 @@ const handlePaymentCallback = async (req, res) => {
             }
         );
 
+        // Enroll the user in the class
+        await enrollmentService.enrollUserInClass(userid, classid);
+
+        
         console.log("Payment record updated to 'completed'");
         res.status(200).json({ message: 'Payment was successfully verified' });
       } else {
