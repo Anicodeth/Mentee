@@ -74,3 +74,20 @@ export async function confirmEnrollment(textRef){
     }
     throw new Error("Failed to confirm enrollment");
 }
+
+export async function goToClass(classId){
+    return fetch(localIp + `/enrollments/class/${classId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            return data.status === "yes";
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+}

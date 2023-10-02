@@ -5,15 +5,29 @@ import {
   faCalendar,
   faClock,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, useParams } from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {defaultPersonProfile, defaultThumbnail} from "../constants";
 import InstructorProfile from "./instructor_profile";
 import {SecondaryButton} from "./buttons";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {goToClass} from "../services/enrollmentService";
 
 export default function LectureDetail(props) {
   let lectureId = useParams().id;
+  const [isAllowed, setIsAllowed] = useState(false);
+  const history = useNavigate();
 
+    const toClass = ()=>{
+      history("/status/" + lectureId);
+    }
+
+  useEffect(() => {
+    goToClass(lectureId).then((res) => {
+        setIsAllowed(res);
+    }).catch((e)=>{
+        console.log(e);
+    });
+  }, []);
   return (
     <div className="lecture-detail w-10/12 m-auto mt-10 bg-white lg:w-6/12 shadow-md shadow-gray-400">
       <div className="lecture-image w-full">
@@ -63,12 +77,7 @@ export default function LectureDetail(props) {
           <div className="price text-gray-700 font-semibold">{props.price}</div>
         </div>
         <div className="lecture-button flex justify-center relative top-5">
-          <SecondaryButton onPress={props.onEnroll} text={"Enroll"} isLoading={props.isLoading} />
-          <Link to={"/status/" + lectureId}>
-            {/*<button className="shadow-md shadow-gray-400 bg-green-500 ml-4 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-xl">*/}
-            {/*  Join (for trial)*/}
-            {/*</button>*/}
-          </Link>
+          <SecondaryButton onPress={isAllowed?toClass:props.onEnroll} text={isAllowed?"Go to class":"Enroll"} isLoading={props.isLoading} />
         </div>
       </div>
     </div>
