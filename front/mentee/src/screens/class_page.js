@@ -18,7 +18,7 @@ import {
   faComments,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {checkLogin} from "../services/userService";
+import {checkLogin, getMe} from "../services/userService";
 
 export default function ClassPage() {
   const [chatPos, setChatPos] = useState("-right-full");
@@ -41,6 +41,7 @@ export default function ClassPage() {
   const [isVideoStream,setIsVideoStream] = useState(false);
   const [lectureDetails,setLectureDetails] = useState({});
   const history = useNavigate();
+
 
   const toggleChat = () => {
     if (chatPos === "right-0") {
@@ -87,7 +88,7 @@ export default function ClassPage() {
 
   function addMessage() {
     const sender = userInfo.name;
-    const text = messageBoxRef.value;
+    const text = messageBoxRef.current.value;
 
     const message = {
       sender: sender,
@@ -95,8 +96,8 @@ export default function ClassPage() {
       status: "sending",
     };
 
+    messageBoxRef.current.value = "";
     setMessages((prevMessages) => [...prevMessages, message]);
-    messageBoxRef.value = "";
 
     fetch(`${localIp}/chat`, {
       method: "POST",
@@ -341,26 +342,17 @@ export default function ClassPage() {
 
     // get the user info from the server
     if (userInfo.name === "unknown") {
-      fetch(`${localIp}/my-info`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: "",
-        }),
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .then((data) => {
-          setUserInfo((prev) => {
-            return { ...prev, name: data.name, email: data.email };
-          });
-        })
-        .catch((err) => {
-          console.log(err);
+      getMe().then(user=>{
+        setUserInfo(prevState => {
+            return {
+                ...prevState,
+                name: user.name,
+                id: user._id,
+            }
         });
+      }).catch((e)=>{
+        console.log(e);
+      });
     }
 
     // get the lecture details from the server

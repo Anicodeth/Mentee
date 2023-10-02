@@ -17,18 +17,30 @@ export default function LectureDetailPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [instructorInfo, setInstructorInfo] = useState(null);
   const history = useNavigate();
+  const [isLoading,setIsLoading] = useState(false);
+  const [isError,setIsError] = useState(false);
+  const [isSuccess,setIsSuccess] = useState(false);
 
   const _makePayment = async () => {
           const userInfo = await getMe();
           const paymentDetail = {classId: lectureId,amount:lectureDetail.price,email:userInfo.email,first_name:userInfo.name.split(" ")[0],last_name:userInfo.name.split(" ")[1],phone_number:"0948671562",returnUrl:`${baseFrontApi}/success`};
           try {
+              setIsLoading(true);
+              setIsSuccess(false);
+              setIsError(false);
               const response = await makePayment(paymentDetail);
               const url = response.url;
               const text_ref = response.textRef;
               localStorage.setItem("text_ref",text_ref);
+              setIsLoading(false);
+              setIsSuccess(true);
+              setIsError(false);
               window.location.replace(url);
           }
           catch (e){
+              setIsLoading(false);
+              setIsSuccess(false);
+              setIsError(true);
               console.log(e);
           }
   }
@@ -71,6 +83,7 @@ export default function LectureDetailPage() {
           // endTime={lectureDetail.endTime}
           price={lectureDetail.price}
           onEnroll={_makePayment}
+          isLoading={isLoading}
         />
       ) : (
           <div className="w-full h-full flex flex-col justify-center items-center">

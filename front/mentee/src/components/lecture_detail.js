@@ -8,9 +8,12 @@ import {
 import { Link, useParams } from "react-router-dom";
 import {defaultPersonProfile, defaultThumbnail} from "../constants";
 import InstructorProfile from "./instructor_profile";
+import {SecondaryButton} from "./buttons";
+import {useState} from "react";
 
 export default function LectureDetail(props) {
   let lectureId = useParams().id;
+
   return (
     <div className="lecture-detail w-10/12 m-auto mt-10 bg-white lg:w-6/12 shadow-md shadow-gray-400">
       <div className="lecture-image w-full">
@@ -60,9 +63,7 @@ export default function LectureDetail(props) {
           <div className="price text-gray-700 font-semibold">{props.price}</div>
         </div>
         <div className="lecture-button flex justify-center relative top-5">
-          <button onClick={props.onEnroll} className="shadow-lg transition delay-50 shadow-gray-400 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xl">
-            Enroll
-          </button>
+          <SecondaryButton onPress={props.onEnroll} text={"Enroll"} isLoading={props.isLoading} />
           <Link to={"/status/" + lectureId}>
             {/*<button className="shadow-md shadow-gray-400 bg-green-500 ml-4 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-xl">*/}
             {/*  Join (for trial)*/}
