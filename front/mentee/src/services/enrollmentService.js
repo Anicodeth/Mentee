@@ -76,18 +76,23 @@ export async function confirmEnrollment(textRef){
 }
 
 export async function goToClass(classId){
-    return fetch(localIp + `/enrollments/class/${classId}`, {
-        method: "GET",
+    return fetch(localIp + `/enrollments/enrolled/`, {
+        method: "POST",
         headers: {
             "Content-Type": "application/json",
             "Authorization": localStorage.getItem("token")
         },
+        body: JSON.stringify({classId:classId}),
     })
-        .then((res) => res.json())
-        .then((data) => {
-            return data.status === "yes";
-        })
-        .catch((err) => {
+        .then((res) => {
+            if(res.status === 200){
+                console.log("successfully enrolled");
+            return true;
+            }else{
+                console.log("failed to enroll",res.status);
+                return false;
+            }
+        }).catch((err) => {
             console.log(err);
         });
 }
