@@ -30,8 +30,7 @@ export async function getMyEnrollments(){
     });
     if(response.status === 200){
         const data = response.json();
-        console.log('success')
-        console.log(response);
+        console.log("successfully got enrolled courses")
         return data;
     }
     else{

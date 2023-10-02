@@ -64,10 +64,14 @@ export default function Dashboard() {
           setProfileInfo(userInfo);
           if(userInfo["role"] === "student"){
               getMyEnrollments().then((classes)=>{
+                  let upcoming = [];
+                  for(let i = 0; i < classes.length; i++){
+                      upcoming.push(classes[i].class);
+                  }
                   setIsLoading(false);
-                  setUpcomingLectures(classes);
-                  setAllLectures(classes);
-                  setTotalLectures(classes.length);
+                  setUpcomingLectures(upcoming);
+                  setAllLectures(upcoming);
+                  setTotalLectures(upcoming.length);
               }).catch((e)=>{
                   setIsLoading(false);
                   console.log(e);
@@ -110,47 +114,27 @@ export default function Dashboard() {
           <div className="title text-2xl font-semibold text-gray-700 px-12 py-8 flex gap-1 justify-center">
               <div
                   className={`py-1 cursor-pointer px-4  transition delay-50 ${
-                      subscribed ? "bg-gray-400 text-gray-100" : ""
+                      subscribed  ? "bg-gray-400 text-gray-100" : ""
                   }`}
                   onClick={toUpcoming}
               >
-                  {profileInfo.role === "student" ? "Subscribed" : "Created"}
+                  {profileInfo.role === "student" ? "Subscribed Lectures" : "Created"}
               </div>{" "}
-              <div
-                  className={`py-1 cursor-pointer px-4  transition delay-50 ${
-                      created ? "bg-gray-400 text-gray-100" : ""
-                  }`}
-                  onClick={toCompleted}
-              >
-                  Completed
-              </div>
+              {/*<div*/}
+              {/*    className={`py-1 cursor-pointer px-4  transition delay-50 ${*/}
+              {/*        created ? "bg-gray-400 text-gray-100" : ""*/}
+              {/*    }`}*/}
+              {/*    onClick={toCompleted}*/}
+              {/*>*/}
+              {/*    Completed*/}
+              {/*</div>*/}
           </div>
       </div>
       <div className="courses mt-4 ">
         <div className="flex flex-col gap-2">
-          <ClassLister lectures={allLectures} isLoading={isLoading} isMyCourse={true} isStudent={profileInfo.role === "student"}/>
+          <ClassLister lectures={allLectures} isLoading={isLoading} isMyCourse={profileInfo.role==="instructor"} isStudent={profileInfo.role === "student"}/>
         </div>
       </div>
-      {/*<nav className="flex items-center justify-center mt-12">*/}
-      {/*  <ul className="flex space-x-2 items-center gap-5">*/}
-      {/*      <li className="text-blue-700 cursor-pointer hover:text-blue-900 text-xl">Previous</li>*/}
-      {/*    {pageNumbers.map(page => (*/}
-      {/*        <li key={page}>*/}
-      {/*          <button*/}
-      {/*              className={`px-4 py-2 rounded-full ${*/}
-      {/*                  currentPage === page*/}
-      {/*                      ? 'bg-blue-600 text-white'*/}
-      {/*                      : 'bg-gray-100 text-gray-600 hover:bg-blue-100'*/}
-      {/*              } focus:outline-none transition-colors duration-300`}*/}
-      {/*          >*/}
-      {/*            {page}*/}
-      {/*          </button>*/}
-      {/*        </li>*/}
-      {/*    ))}*/}
-      {/*      <li className="text-blue-700 cursor-pointer hover:text-blue-900 text-xl">Next</li>*/}
-      {/*  </ul>*/}
-      {/*</nav>*/}
-
       <div className="footer w-full  ">
         <Footer />
       </div>
