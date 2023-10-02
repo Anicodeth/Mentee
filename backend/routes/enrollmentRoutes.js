@@ -87,4 +87,7 @@ router.get('/user', authMiddleware, enrollmentController.getUserEnrollments);
  */
 router.get('/class/:classId', authMiddleware, enrollmentController.getClassEnrollments);
 
+
+router.post('/enrolled', authMiddleware, enrollmentController.searchUserEnrollment);
+
 module.exports = router;
