@@ -53,12 +53,16 @@ const searchUserEnrollment = async (req, res) => {
     const { userId } = req.user; // From the authenticated user
     const { classId } = req.body;
     const userEnrollments = await enrollmentService.getUserEnrollments(userId);
-    const enrolled = userEnrollments.some((enrollment) => enrollment.class == classId);
-    if (!enrolled){
-      res.status(200).json({"isEnrolled":false})
-      return
+    const enrolled = userEnrollments.some((enrollment) => enrollment.class._id == classId);
+    console.log("enrollement status")
+    console.log(enrolled);
+    if (enrolled){
+      res.status(200).json({"isEnrolled":true})
+      
+    }else{
+
+      res.status(200).json({"isEnrolled":false});
     }
-    res.status(200).json({"isEnrolled":true});
 
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch user enrollments' });
