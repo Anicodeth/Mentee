@@ -14,5 +14,5 @@ const localLinks = [
 const socialLinks = ["Facebook", "Twitter", "Instagram", "LinkedIn"];
 const infoLinks = ["privacy policy", "Terms Of Service"];
 const defaultThumbnail = "https://altair.com/images/default-source/resource-images/antenna-optimization-machine-learning-thumbnail-jpg.jpg";
-const defaultPersonProfile = "images/person_1.png";
+const defaultPersonProfile = "images/person.png";
 export { globalIp, localIp, localLinks, socialLinks, infoLinks, baseFrontApi,baseApi,defaultThumbnail,defaultPersonProfile };

@@ -19,6 +19,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {checkLogin, getMe} from "../services/userService";
+import {getClass} from "../services/classesService";
 
 export default function ClassPage() {
   const [chatPos, setChatPos] = useState("-right-full");
@@ -41,7 +42,6 @@ export default function ClassPage() {
   const [isVideoStream,setIsVideoStream] = useState(false);
   const [lectureDetails,setLectureDetails] = useState({});
   const history = useNavigate();
-
 
   const toggleChat = () => {
     if (chatPos === "right-0") {
@@ -110,7 +110,7 @@ export default function ClassPage() {
       }),
     })
       .then((res) => {
-        console.log("sucess in chat req");
+        console.log("success in chat req");
       })
       .catch((err) => {
         console.log(err);
@@ -356,28 +356,17 @@ export default function ClassPage() {
     }
 
     // get the lecture details from the server
-    fetch(`${localIp}/lecture/${roomId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        const data = res.json();
-        return data;
-      })
-      .then((data) => {
+    getClass(roomId).then((data) => {
         setLectureDetails((prevData) => {
           return {
             ...prevData,
-            title: data.title,
+            title: data.name,
             description: data.description,
-            date: data.date,
-            time: data.time,
-            duration: data.duration,
+            date: data.schedule.substring(0,10),
+            time: data.schedule.substring(11,19),
+            duration: 120,
           };
-        });
-      })
+      })})
       .catch((err) => {
         console.log(err);
       });

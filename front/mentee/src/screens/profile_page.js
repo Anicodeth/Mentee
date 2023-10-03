@@ -118,7 +118,7 @@ export default function ProfilePage(props) {
           <h2 className="text-2xl font-semibold mb-4">Profile Information</h2>
           <div className="flex items-center mb-6">
             <img
-              src={profileInfo.image_src?profileInfo.image_src:"images/person_3.png"}
+              src={profileInfo.image_src?profileInfo.image_src:"/images/person.png"}
               alt="User Avatar"
               className="w-20 rounded-full"
             />

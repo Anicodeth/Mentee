@@ -9,6 +9,8 @@ import {checkLogin, getMe} from "../services/userService";
 import {useNavigate} from "react-router-dom";
 import {ClassLister} from "../components/class_lister";
 import {getMyEnrollments} from "../services/enrollmentService";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSpinner} from "@fortawesome/free-solid-svg-icons";
 
 export default function Dashboard() {
   const [allLectures, setAllLectures] = useState(null);
@@ -118,7 +120,9 @@ export default function Dashboard() {
                   }`}
                   onClick={toUpcoming}
               >
-                  {profileInfo.role === "student" ? "Subscribed Lectures" : "Created"}
+                  {profileInfo.role === "student" && "Subscribed Lectures"}
+                  {profileInfo.role === "instructor" && "Created Lectures"}
+                  {!profileInfo.role && <FontAwesomeIcon icon={faSpinner}/>}
               </div>{" "}
               {/*<div*/}
               {/*    className={`py-1 cursor-pointer px-4  transition delay-50 ${*/}

@@ -13,15 +13,17 @@ import {useEffect, useState} from "react";
 import {goToClass} from "../services/enrollmentService";
 
 export default function LectureDetail(props) {
-  let lectureId = useParams().id;
+  let lectureId = localStorage.getItem("current_lecture");
   const [isAllowed, setIsAllowed] = useState(false);
   const history = useNavigate();
 
     const toClass = ()=>{
-      history("/status/" + lectureId);
+      history("/status");
     }
 
   useEffect(() => {
+
+    console.log(lectureId);
     goToClass(lectureId).then((res) => {
         setIsAllowed(res);
     }).catch((e)=>{
@@ -57,7 +59,7 @@ export default function LectureDetail(props) {
             Time
           </div>
           <div className="time text-gray-700 font-semibold">
-            {props.startTime} - {props.endTime}
+            {props.time}
           </div>
         </div>
         <div className="lecture-duration text-gray-600 flex items-center gap-4 mt-4">
@@ -74,7 +76,7 @@ export default function LectureDetail(props) {
             <FontAwesomeIcon icon={faDollar} className="mr-4" />
             Price
           </div>
-          <div className="price text-gray-700 font-semibold">{props.price}</div>
+          <div className="price text-gray-700 font-semibold">{props.price} birr</div>
         </div>
         <div className="lecture-button flex justify-center relative top-5">
           <SecondaryButton onPress={isAllowed?toClass:props.onEnroll} text={isAllowed?"Go to class":"Enroll"} isLoading={props.isLoading} />

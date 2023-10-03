@@ -11,8 +11,9 @@ import {getMe} from "../services/userService";
 export default function MenteeHeader(props) {
     const [profileInfo,setProfileInfo] = useState({});
     const searchRef = useRef(null);
-    const isLogged = !!window.localStorage.getItem("token");
+    const isLogged = !!window.sessionStorage.getItem("token");
     const history = useNavigate();
+    const user = sessionStorage.getItem("user");
 
     useEffect(() => {
         if(searchRef.current !== null){
@@ -20,11 +21,17 @@ export default function MenteeHeader(props) {
         }
 
         // getting user info
-       getMe().then(userInfo => {
-           setProfileInfo(userInfo);
-       }).catch((e)=>{
-           console.log(e);
-       })
+       if(user === null){
+           getMe().then(userInfo => {
+               sessionStorage.setItem("user",JSON.stringify(userInfo));
+               setProfileInfo(userInfo);
+           }).catch((e)=>{
+               console.log(e);
+           })
+       }
+       else{
+              setProfileInfo(JSON.parse(user));
+       }
 }, []);
 
     const toProfile = ()=>{

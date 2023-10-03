@@ -18,7 +18,7 @@ export async function register(user) {
         if (response.status === 201) {
         const { data } = response;
 
-        localStorage.setItem(tokenKey, data["token"]);
+        sessionStorage.setItem(tokenKey, data["token"]);
 
         return "success";
         }
@@ -45,7 +45,7 @@ export async function login({email, password}) {
         console.log(response.status);
         if (response.status === 200) {
             const { data } = response;
-            localStorage.setItem(tokenKey, data["token"]);
+            sessionStorage.setItem(tokenKey, data["token"]);
             return "success";}
         else{
                 if(response.status === 401){

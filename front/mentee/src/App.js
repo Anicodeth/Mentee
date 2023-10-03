@@ -17,9 +17,16 @@ import PaymentSuccess from "./screens/payment_success_page";
 // 1. import `ChakraProvider` component
 import { ChakraProvider } from '@chakra-ui/react'
 import EnrolledStudentsListerPage from './screens/enrolled_students_page';
+import {useEffect} from "react";
 
 
 function App() {
+
+  useEffect(
+    () => {
+      document.title = "Mentee"
+    }
+  )
   return (
       <ChakraProvider>
         <BrowserRouter>
@@ -28,7 +35,7 @@ function App() {
             <Route path="signup" element={<SignupPage />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="class/:id/:isteacher" element={<ClassPage />} />
-            <Route path="status/:id" element={<ClassStatusPage />} />
+            <Route path="status" element={<ClassStatusPage />} />
             <Route path="lectures" element={<LecturesHomePage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="dashboard" element={<Dashboard />} />

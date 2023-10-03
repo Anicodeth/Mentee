@@ -5,7 +5,7 @@ export async function enrollUser(classDetail){
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
         body: JSON.stringify(classDetail),
     })
@@ -25,7 +25,7 @@ export async function getMyEnrollments(){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
     });
     if(response.status === 200){
@@ -44,7 +44,7 @@ export async function getEnrolledStudents(classId){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
     })
         .then((res) => res.json())
@@ -63,7 +63,7 @@ export async function confirmEnrollment(textRef){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
     });
     if(response.ok){
@@ -76,23 +76,23 @@ export async function confirmEnrollment(textRef){
 }
 
 export async function goToClass(classId){
+    console.log(classId);
     return fetch(localIp + `/enrollments/enrolled/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
         body: JSON.stringify({classId:classId}),
     })
         .then((res) => {
-            if(res.status === 200){
-                console.log("successfully enrolled");
-            return true;
-            }else{
-                console.log("failed to enroll",res.status);
-                return false;
-            }
-        }).catch((err) => {
+            return res.json();
+        })
+        .then((data) => {
+            console.log(data.isEnrolled);
+            return data.isEnrolled;
+        })
+        .catch((err) => {
             console.log(err);
         });
 }

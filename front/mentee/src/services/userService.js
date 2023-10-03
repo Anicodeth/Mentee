@@ -6,7 +6,7 @@ export async function getMe() {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         }
     })
         .then((res) => res.json())
@@ -17,7 +17,7 @@ export async function getMe() {
 }
 
 export function checkLogin() {
-    return !!window.localStorage.getItem("token");
+    return !!window.sessionStorage.getItem("token");
 }
 
 export async function updateUser(userDetail){
@@ -25,7 +25,7 @@ export async function updateUser(userDetail){
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
         body: userDetail
     })
@@ -41,7 +41,7 @@ export async function deleteUser(userId){
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
     })
         .then((res) => res.json())
@@ -56,7 +56,7 @@ export async function getUser(userId){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
     })
         .then((res) => res.json())
@@ -71,7 +71,7 @@ export function getAllUsers(){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
     });
     if(response.ok){

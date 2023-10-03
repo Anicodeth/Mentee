@@ -5,7 +5,7 @@ export function searchClasses(term){
         method:"POST",
         headers:{
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
         body:JSON.stringify({
             "query":term
@@ -26,7 +26,7 @@ export function getAllClasses(){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         }
     })
         .then((res) => res.json())
@@ -41,7 +41,7 @@ export async function getClass(classId){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token"),
+            "Authorization": sessionStorage.getItem("token"),
         },
     })
         .then((res) => res.json())
@@ -56,7 +56,7 @@ export async function createClass(classDetail){
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
         body: JSON.stringify(classDetail),
     })
@@ -75,7 +75,7 @@ export async function deleteClass(classId){
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
     })
         .then((res) => res.json())
@@ -93,7 +93,7 @@ export async function updateClass(classDetail){
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         },
         body: JSON.stringify(classDetail),
     })
@@ -113,7 +113,7 @@ export function getMyClasses(){
         method: "GET",
         headers: {
             "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
+            "Authorization": sessionStorage.getItem("token")
         }
     })
         .then((res) => res.json())

@@ -76,6 +76,7 @@ export default function LectureDetailPage() {
           instructorName={instructorInfo.name}
           instructorEmail={instructorInfo.email}
           date={lectureDetail.schedule}
+          time={lectureDetail.schedule.substring(11,16)}
           duration={"120"}
           description={lectureDetail.description}
           // thumbnail={lectureDetail.thumbnail}
@@ -95,7 +96,6 @@ export default function LectureDetailPage() {
                   size='xl'
               />
           </div>
-
       )}
       <div className="">
         <Footer />
