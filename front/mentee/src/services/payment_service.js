@@ -7,7 +7,7 @@ export async function makePayment(paymentDetail) {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token')
+        'Authorization': sessionStorage.getItem('token')
     },
       body: JSON.stringify(paymentDetail)
       });
@@ -24,7 +24,7 @@ export async function withdrawPayment(classId){
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('token')
+            'Authorization': sessionStorage.getItem('token')
         },
         body: JSON.stringify({classId})
     });

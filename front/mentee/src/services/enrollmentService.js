@@ -58,7 +58,6 @@ export async function getEnrolledStudents(classId){
 }
 
 export async function confirmEnrollment(textRef){
-    console.log(textRef);
     const response = await fetch(localIp + `/payment/verify-payment/${textRef}`, {
         method: "GET",
         headers: {
