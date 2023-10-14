@@ -109,6 +109,23 @@ const getUserById = async (req, res) => {
   }
 };
 
+
+const getUserGivenId = async (req, res) => {
+  try {
+        console.log(req.user);
+ 
+        const id = req.params.id;
+        const foundUser = await userService.getUserById(id);
+        return res.status(200).json(foundUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch user details' });
+  };
+};
+
+
+        
+
+
 // Function to update a user by their ID
 const updateUserById = async (req, res) => {
   try {
@@ -150,5 +167,6 @@ module.exports = {
   updateUserById,
   deleteUserById,
   loginUser,
+  getUserGivenId
 
 };

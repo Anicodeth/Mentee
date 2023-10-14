@@ -22,7 +22,7 @@ const getUserEnrollments = async (req, res) => {
         const { userId } = req.user; // From the authenticated user
 
         const userEnrollments = await enrollmentService.getUserEnrollments(userId);
-        res.json(userEnrollments);
+        res.status(200).json(userEnrollments);
 
   } catch (error) {
 
@@ -47,8 +47,33 @@ const getClassEnrollments = async (req, res) => {
   }
 };
 
+/*method to search if the user is enrolled in the class given class id*/
+const searchUserEnrollment = async (req, res) => {
+  try {
+    const { userId } = req.user; // From the authenticated user
+    const { classId } = req.body;
+    const userEnrollments = await enrollmentService.getUserEnrollments(userId);
+    const enrolled = userEnrollments.some((enrollment) => enrollment.class._id == classId);
+    console.log("enrollement status")
+    console.log(enrolled);
+    if (enrolled){
+      res.status(200).json({"isEnrolled":true})
+      
+    }else{
+
+      res.status(200).json({"isEnrolled":false});
+    }
+
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch user enrollments' });
+  }
+};
+
+
 module.exports = {
   enrollUserInClass,
   getUserEnrollments,
   getClassEnrollments,
+  searchUserEnrollment
+
 };

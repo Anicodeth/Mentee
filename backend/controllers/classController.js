@@ -54,7 +54,8 @@ const getClassesByInstructor = async (req, res) => {
   
  
     try {
-      const instructorId = req.user._id;
+      const instructorId = req.user.userId;
+     
       const classesByInstructor = await classService.getClassesByInstructorId(
         instructorId
       );

@@ -85,22 +85,6 @@ export default function Home() {
         getStartedButton={homePageData.getStartedButton}
         heroImage={homePageData.heroImage}
       />
-      <div className="social-logos flex-column justify-center align-center ">
-        <div className="flex justify-center text-2xl text-gray-800 font-bold">
-          Get Us On
-        </div>
-        <ul className="flex pt-10 gap-12 w-full justify-center align-center ">
-          {socialLogos.map((logo) => {
-            return (
-              <li>
-                <a href={logo.link}>
-                  <img className="w-12" alt="" src={logo.image}></img>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
 
       <div className="experts mt-28">
         <div className="flex flex-col justify-center align-center gap-4">
